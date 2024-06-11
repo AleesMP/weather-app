@@ -1,13 +1,53 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="./assets/style.css" rel="stylesheet">
 </head>
+
 <body>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+<div id="sidebar-section" class="h-screen fixed">
+  <div id="sidebar" class="fixed h-screen top-0 left-0 bg-slate-800 w-20 hover:w-72 duration-200">
+    <nav role="navigation" class="pl-4 pt-8 mt-4">
+      <div class="mt-4 relative overflow-hidden">
+        <h1 class="name text-white fixed top-0 left-0 text-lg">El tiempo</h1>
+        <ul id="nav-list" class="nav-list space-y-8">
+          <li class="nav-item text-xl active p-2 rounded-l-lg text-white hover:bg-white hover:text-blue-800">
+            <a href="#home" class="flex gap-5"><i class="fa-solid fa-house fa-2x"></i>Home</a>
+          </li>
+          <li class="nav-item text-xl p-2 rounded-l-lg text-white hover:bg-white hover:text-blue-800">
+            <a href="#home" class="flex gap-5"><i class="fa-solid fa-house fa-2x"></i>Home</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+  <!-- <div class="container">
+    <div class="weather-card">
+      <h1>Weather App</h1>
+      <input type="text" id="city-input" placeholder="Enter city name">
+      <button id="city-input-btn" onclick="weatherFn($('#city-input').val())">
+        Get Weather
+      </button>
+      <div id="weather-info" class="animate__animated animate__fadeIn">
+        <h3 id="city-name"></h3>
+        <p id="date"></p>
+        <img id="weather-icon" src="" alt="Weather Icon">
+        <p id="temperature"></p>
+        <p id="description"></p>
+        <p id="wind-speed"></p>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://momentjs.com/downloads/moment.min.js"></script> -->
+  <script src="main.js"></script>
 </body>
+
 </html>
