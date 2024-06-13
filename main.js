@@ -1,79 +1,62 @@
-const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
-const apiKey = "eb09705f59f13d948efa3f16fa466a92";
-
-const searchBox = document.querySelector(".search input")
-const searchBtn = document.querySelector(".search button")
-
-async function checkWeather(city) {
-  const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
-  var data = await response.json();
-
-  console.log(data);
-
-  document.querySelector(".city").innerHTML = data.name;
-  document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "ºC";
-  document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
-  document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
-  document.querySelector(".city").innerHTML = data.name;
-  document.querySelector(".city").innerHTML = data.name;
-}
-
-searchBtn.addEventListener("click", ()=>{
-    checkWeather(searchBox.value);
-})
-
-
-
-checkWeather();
-
-
-
-
-
-
-
-
 // Sidebar
 var navList = document.getElementById("nav-list");
 var items = navList.getElementsByClassName("nav-item");
 
-for (var i=0; i<items.length; i++) {
-    items[i].addEventListener("click", function(){
-        var current = document.querySelectorAll('.active');
-        current.forEach((element) => {
-            element.classList.remove("active");
-        });
+for (var i = 0; i < items.length; i++) {
+  items[i].addEventListener("click", function () {
+    var current = document.querySelectorAll(".active");
+    current.forEach((element) => {
+      element.classList.remove("active");
+    });
 
-        this.classList.add('active');
-    })
+    this.classList.add("active");
+  });
 }
 
-// // Funcion tiempo
-// $(document).ready(function () {
-//   weatherFn("Valencia");
-// });
+// Main 
+const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+const apiKey = "eb09705f59f13d948efa3f16fa466a92";
 
-// async function weatherFn(cName) {
-//   const temp = `${apiUrl}?q=${cName}&appid=${apiKey}&units=metric`;
-//   try {
-//     const res = await fetch(temp);
-//     const data = await res.json();
-//     if (res.ok) {
-//       weatherShowFn(data);
-//     } else {
-//       alert("Ciudad no encontrada. Por favor, introduce una ciudad existente");
-//     }
-//   } catch (error) {
-//     console.error("Error fetching weather data:", error);
-//   }
-// }
+const searchBox = document.querySelector(".search input");
+const searchBtn = document.querySelector(".search button");
+const weatherIcon = document.querySelector("#weather-icon");
 
-// function weatherShowFn(data) {
-//   $("#city-name").text(data.name);
-//   $("#date").text(moment().format("MMMM Do YYYY, h:mm:ss a"));
-//   $("#temperature").html(`${data.main.temp}°C`);
-//   $("#description").text(data.weather[0].description);
-//   $("#wind-speed").html(`Wind Speed: ${data.wind.speed} m/s`);
-//   $("#weather-icon").attr("src", `...`);
-//   $("#weather-info").fadeIn();
-// }
+async function checkWeather(city) {
+  try {
+    const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+    const data = await response.json();
+
+    if (response.status === 404) {
+      document.querySelector(".weather").style.display = "none";
+      document.querySelector(".error").style.display = "block";
+      return;
+    }
+
+    console.log(data);
+
+    document.querySelector(".city").innerHTML = data.name;
+    document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "ºC";
+    document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+    document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+
+    function updateWeatherIcon(data) {
+      let iconCode = data.weather[0].icon;
+      weatherIcon.src = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+    }
+
+    updateWeatherIcon(data);
+
+    document.querySelector(".weather").style.display = "block";
+    document.querySelector(".error").style.display = "none";
+
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    document.querySelector(".weather").style.display = "none";
+    document.querySelector(".error").style.display = "block";
+    weatherIcon.src = "/assets/svg/default.svg";
+  }
+}
+
+searchBtn.addEventListener("click", () => {
+  checkWeather(searchBox.value);
+});

@@ -4,13 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./assets/style.css" />
   <script type="module" src="./main.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://momentjs.com/downloads/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
   <title>Weather App</title>
 </head>
 
@@ -27,7 +29,8 @@
             <a href="#add" class="flex gap-5 items-center"><i class="fa-solid fa-map-location-dot"></i>Añadir</a>
           </li>
           <li class="nav-item text-xl p-2 rounded-l-lg text-white hover:bg-white hover:text-blue-800">
-            <a href="#settings" class="flex gap-5 items-center"><i class="fa-solid fa-triangle-exclamation"></i>Avisos</a>
+            <a href="#settings" class="flex gap-5 items-center"><i
+                class="fa-solid fa-triangle-exclamation"></i>Avisos</a>
           </li>
           <li class="nav-item text-xl p-2 rounded-l-lg text-white hover:bg-white hover:text-blue-800">
             <a href="#settings" class="flex gap-5 items-center"><i class="fa-solid fa-gear"></i>Ajustes</a>
@@ -41,59 +44,39 @@
       </div>
     </nav>
   </div>
-  
-  
-<main class="flex-1 p-8 ml-16 text-center">
-  <div class="fixed top-0 bg-white rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-80 mb-6 mt-6">
-    <div class="flex justify-center p-4">
-      <input
-        class="p-4 w-3/4 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-400 placeholder:text-gray-400"
-        type="text" placeholder="Buscar por localización">
-      <button
-        class="p-4 ml-2 bg-blue-400 text-white border-none rounded-lg text-base cursor-pointer hover:bg-blue-500"
-        onclick="weatherFn($('#city-input').val())">
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </button>
-    </div>
-  </div>
-  <div>
-    <div class="p-3 bg-white rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-[450px]">
-      <div id="weather-info" class="hidden">
-        <h3 id="city-name"></h3>
-        <p id="date" class="text-lg text-red-300"></p>
-        <img id="weather-icon" class="w-[100px] h-[100px]" src="" alt="Weather Icon">
-        <p id="temperature" class="text-2xl font-bold my-2"></p>
-        <p id="description" class="text-lg mb-[10px]"></p>
-        <p id="wind-speed" class="text-lg text-green-300"></p>
+
+
+  <main class="flex-1 p-8 ml-16 text-center">
+    <div class="fixed top-0 bg-white rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-80 mb-6 mt-6">
+      <div class="search flex justify-center p-4">
+        <input
+          class="p-4 w-3/4 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-400 placeholder:text-gray-400"
+          type="text" placeholder="Buscar por ciudad" spellcheck="false">
+        <button class="p-4 ml-2 bg-blue-400 text-white border-none rounded-lg text-base cursor-pointer hover:bg-blue-500">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
       </div>
     </div>
-  </div>
-
-
-  
-  <div class="p-3 bg-white rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-[450px]">
-    <div class="search">
-      <input type="text" placeholder="Buscar por ciudad" spellcheck="false">
-      <button>Buscar</button>
-    </div>
-    <div class="weather">
-      <img src="images/rain.png" alt="weather-icon">
-      <h1 class="temp">22ºC</h1>
-      <h2 class="city"></h2>
+    
+    <div class="weather p-3 bg-white rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-[450px]" style="display: none;">
+      <h1 class="city"></h1>
+      <div class="flex items-center justify-center">
+        <img id="weather-icon" src="" alt="weather-icon">
+      </div>
+      <h2 class="temp"></h2>
       <div class="details">
-        <div class="col">
-          <img src="images/humidity.png">
-          <div>
-            <p class="humidity">50%</p>
-            <p>Humidity</p>
-          </div>
-        </div>
+        <p class="humidity"></p>
+        <p class="wind"></p>
       </div>
     </div>
-  </div>
-
-
-</main>
+    <!-- Error: city not found -->
+    <div class="error text-center text-slate-500 items-center justify-center z-50 hidden">
+      <img src="assets/svg/default.svg" alt="default image" class="w-10 h-10 mx-auto mb-2">
+      <p class="text-black">Ciudad no encontrada</p>
+    </div>
+    
+    
+  </main>
 
 
 </body>
