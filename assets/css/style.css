@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 /* Sidebar menu */
-/* .active {
+.active {
     background-color: aliceblue;
     color: blue;
     display: block !important;
-} */
+}
 
 /* Main */
-/* body {
+body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
     display: flex;
@@ -18,5 +18,5 @@
     align-items: center;
     height: 100vh;
     background: linear-gradient(to right, #0e4069, #2196f3);
-} */
+}
  
