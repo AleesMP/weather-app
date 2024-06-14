@@ -6,6 +6,7 @@
 .active {
     background-color: aliceblue;
     color: blue;
+    display: block !important;
 }
 
 /* Main */
