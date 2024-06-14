@@ -10,11 +10,9 @@ for (var i = 0; i < items.length; i++) {
     });
 
     this.classList.add("active");
-
-    // Debugging: Log current active item
-    console.log("Clicked item:", this);
   });
 }
+
 // Main 
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
 const apiKey = "eb09705f59f13d948efa3f16fa466a92";
