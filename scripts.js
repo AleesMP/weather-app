@@ -4,12 +4,16 @@ var items = navList.getElementsByClassName("nav-item");
 
 for (var i = 0; i < items.length; i++) {
   items[i].addEventListener("click", function () {
+    console.log("Clicked item:", this); // Añadir log para depuración
+
     var current = document.querySelectorAll(".active");
     current.forEach((element) => {
       element.classList.remove("active");
+      console.log("Removed active class from:", element); // Añadir log para depuración
     });
 
     this.classList.add("active");
+    console.log("Added active class to:", this); // Añadir log para depuración
   });
 }
 
