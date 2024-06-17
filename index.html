@@ -17,26 +17,26 @@
       <ul id="nav-list" class="list-none mt-5 h-4/5 overflow-y-auto overflow-x-hidden">
         <li>
           <a href="#"
-            class="nav-item flex items-center gap-4 text-green-500 py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-blue-600 text-white rounded-md">
-            <i class="fa-solid fa-house"></i>Dashboard
+            class="nav-item flex items-center gap-4 text-white py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-blue-500 rounded-md">
+            <i class="fa-solid fa-house"></i>Inicio
           </a>
         </li>
         <li>
           <a href="#"
-            class="nav-item flex items-center gap-4 text-green-500 py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-blue-600 text-white rounded-md">
-            <i class="fa-solid fa-house"></i>Notifications
+            class="nav-item flex items-center gap-4 text-white py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-blue-500 rounded-md">
+            <i class="fa-solid fa-bell"></i>Notificaciones
           </a>
         </li>
         <li>
           <a href="#"
-            class="nav-item flex items-center gap-4 text-green-500 py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-blue-600 text-white rounded-md">
-            <i class="fa-solid fa-house"></i>Settings
+            class="nav-item flex items-center gap-4 text-white py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-blue-500 rounded-md">
+            <i class="fa-solid fa-gear"></i><span>Configuración</span>
           </a>
         </li>
         <li>
           <a href="#"
-            class="nav-item flex items-center gap-4 text-green-500 py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-blue-600 text-white rounded-md">
-            <i class="fa-solid fa-house"></i>Logout
+            class="flex items-center gap-4 text-white py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-red-500 rounded-md">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Salir</span>
           </a>
         </li>
       </ul>
@@ -45,19 +45,20 @@
 
   <main class="flex-1 p-8 ml-16 text-center">
     <div
-      class="fixed top-0 bg-white rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-80 mb-6 mt-6">
+      class="fixed top-0 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-80 mb-6 mt-6">
       <div class="search flex justify-center p-4">
         <input
           class="p-4 w-3/4 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-400 placeholder:text-gray-400"
           type="text" placeholder="Buscar por ciudad" spellcheck="false">
         <button
-          class="p-4 ml-2 bg-blue-400 text-white border-none rounded-lg text-base cursor-pointer hover:bg-blue-500">
+          class="p-4 ml-2 bg-blue-400 text-white border-none rounded-lg text-base cursor-pointer transition duration-300 ease-in-out hover:bg-blue-500">
           <i class="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
     </div>
 
-    <div class="weather p-3 bg-white rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-[450px]"
+    <!-- Weather info "cards" -->
+    <!-- <div class="weather p-3 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-[450px]"
       style="display: none;">
       <h1 class="city"></h1>
       <div class="flex items-center justify-center">
@@ -68,13 +69,86 @@
         <p class="humidity"></p>
         <p class="wind"></p>
       </div>
-    </div>
-    <!-- Error: city not found -->
-    <div class="error text-center text-slate-500 items-center justify-center z-50 hidden">
-      <img src="assets/svg/default.svg" alt="default image" class="w-10 h-10 mx-auto mb-2">
-      <p class="text-black">Ciudad no encontrada</p>
+    </div> -->
+    
+    <!-- ! --><!-- FIXME: Error consola -->
+    <!-- ? PARA ARREGLARLO AÑADIR 'WEATHER' AL CLASS DE TODOS LOS DIV'S -->
+    
+    <!-- TODO: Rellenar todas las "cards" con info -->
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- City info -->
+      <div class="weather col-span-3 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left"> <!-- TODO: Añadir hidden (display:none)-->
+        <div class="city text-xl font-bold">Ciudad</div>
+        <span class="country"></span>
+        <div id="time"></div>
+        <!-- TODO: reestructurar como se muestra icono, temp, etc. -->
+        <div class="flex flex-col items-center mt-4">
+          <div class="flex items-center">
+              <img id="weather-icon" class="w-24 h-24" src="#" alt="weather-icon">
+              <div class="ml-4">
+                  <div class="font-bold text-5xl leading-none mb-1">
+                      <span class="temp">?</span>
+                      <span class="text-base align-top">ºC</span>
+                  </div>
+                  <div class="description text-sm ">Descripción</div>
+              </div>
+          </div>
+      </div>
+        <!-- TODO: añadirle iconos a la info -->
+        <div class="details text-sm mt-4 flex items-center justify-center space-x-4">
+          <div class="flex items-center">
+              <i class="fa-solid fa-water"></i>
+              <p class="humidity ml-1">Humedad</p>
+          </div>
+      
+          <div class="flex items-center">
+              <i class="fa-solid fa-wind"></i>
+              <p class="wind ml-1">Viento</p>
+          </div>
+      
+          <div class="flex items-center rain-container"></div>
+      </div>
+      </div>
+      <!-- City map -->
+      <div class="col-span-6 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+        <div class="text-xl font-bold">Mapa</div>
+      </div>
+      <!-- Popular cities -->
+      <div class="col-span-3 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+        <div class="text-xl font-bold">Otras ciudades</div>
+
+      </div>
+      <!-- Segunda fila -->
+      <!-- Forecast -->
+        <div class="forecast col-span-4 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left">
+          <div class="flex justify-between items-center mb-4">
+            <div class="text-xl font-bold">Previsión</div>
+            <div class="forecast-buttons">
+              <button>3 días</button>
+              <button>5 días</button>
+            </div>
+          </div>
+          <div class="forecast-container">
+            <!-- Aquí se añadirán dinámicamente los datos de la previsión -->
+          </div>
+        </div>
+
+      
+      <!-- Summary -->
+      <!-- ? Añadir botones para cambiar entre resumen semanal, por horas y más detalles -->
+      <div class="col-span-8 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+        <div class="text-xl font-bold">Resumen</div>
+        <div class="grid grid-cols-2 gap-4"></div>
+      </div>
     </div>
 
+
+    <!-- Error: city not found -->
+    <div class="error text-center text-slate-500 items-center justify-center z-50 hidden">
+      <img src="assets/images/default.svg" alt="default image" class="w-10 h-10 mx-auto mb-2">
+      <p class="text-black">Ciudad no encontrada</p>
+    </div>
 
   </main>
 
