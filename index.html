@@ -11,31 +11,40 @@
 </head>
 
 <body class="flex">
-
-  <!-- Posible navbar -->
+  <!-- Nabvar -->
+  <div
+    class="fixed flex px-6 py-4 justify-between items-center top-0 left-0 w-full custom-bg-opacity shadow-2xl  ">
+    <div class="text-white text-2xl font-bold">
+      <i class="fa-solid fa-cloud-sun-rain"></i><span class="ml-2">Weather</span>
+    </div>
+    <div class="search flex justify-center flex-grow mx-4">
+      <input
+        class="p-4 w-96 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-400 placeholder:text-gray-400"
+        type="text" placeholder="Buscar por ciudad" spellcheck="false"> 
+      <button
+        class="p-4 ml-2 bg-blue-400 text-white border-none rounded-lg text-base cursor-pointer transition duration-300 ease-in-out hover:bg-blue-500">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+    <div class="theme-toggle">
+      <button id="theme-toggle" class="p-4 bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg cursor-pointer transition duration-300 ease-in-out">
+        <i id="theme-icon" class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </div>
 
   <main class="flex-1 p-8 text-center">
-    <div
-      class="fixed top-0 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-80 mb-6 mt-6">
-      <div class="search flex justify-center p-4">
-        <input
-          class="p-4 w-3/4 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-400 placeholder:text-gray-400"
-          type="text" placeholder="Buscar por ciudad" spellcheck="false">
-        <button
-          class="p-4 ml-2 bg-blue-400 text-white border-none rounded-lg text-base cursor-pointer transition duration-300 ease-in-out hover:bg-blue-500">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-      </div>
-    </div>
     
     <!-- ! --><!-- FIXME: Error consola -->
     <!-- ? PARA ARREGLARLO AÑADIR 'WEATHER' AL CLASS DE TODOS LOS DIV'S -->
     
     <!-- TODO: Rellenar todas las "cards" con info -->
+     <!-- TODO: añadir "dark:(con respectivo estilo)" para el switch light/dark -->
 
     <div class="grid grid-cols-12 gap-6">
+
       <!-- City info -->
-      <div class="weather col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left "> <!-- TODO: Añadir hidden (display:none)-->
+      <div class="weather col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left"> <!-- TODO: Añadir hidden (display:none)-->
         <div class="city text-xl font-bold">Ciudad</div>
         <span class="country"></span>
         <div id="time"></div>
@@ -68,17 +77,17 @@
       </div>
       </div>
       <!-- City map -->
-      <div class="col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+      <div class="col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center ">
         <div class="text-xl font-bold">Mapa</div>
       </div>
       <!-- Popular cities -->
-      <div class="col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+      <div class="col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center ">
         <div class="text-xl font-bold">Otras ciudades</div>
 
       </div>
       <!-- Segunda fila -->
       <!-- Forecast -->
-        <div class="forecast col-span-4 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left">
+        <div class="forecast col-span-4 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left ">
           <div class="flex justify-between items-center mb-4">
             <div class="text-xl font-bold">Previsión</div>
             <div class="forecast-buttons">
@@ -94,7 +103,7 @@
       
       <!-- Summary -->
       <!-- ? Añadir botones para cambiar entre resumen semanal, por horas y más detalles -->
-      <div class="col-span-8 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+      <div class="col-span-8 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center ">
         <div class="text-xl font-bold">Resumen</div>
         <div class="grid grid-cols-2 gap-4"></div>
       </div>
