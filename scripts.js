@@ -1,18 +1,3 @@
-// Sidebar
-// var navList = document.getElementById("nav-list");
-// var items = navList.getElementsByClassName("nav-item");
-
-// for (var i = 0; i < items.length; i++) {
-//   items[i].addEventListener("click", function () {
-//     var current = document.querySelectorAll(".active");
-//     current.forEach((element) => {
-//       element.classList.remove("active");
-//     });
-
-//     this.classList.add("active");
-//   });
-// }
-
 // Main
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
 const apiKey = "eb09705f59f13d948efa3f16fa466a92";

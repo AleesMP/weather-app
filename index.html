@@ -12,40 +12,11 @@
 
 <body class="flex">
 
-  <aside
-      class="sidebar fixed z-50 top-0 left-0 h-screen w-20 flex flex-col overflow-x-hidden bg-gray-800 p-6 transition-all duration-400 ease-in-out">
-      <ul id="nav-list" class="list-none mt-5 h-4/5 overflow-y-auto overflow-x-hidden">
-        <li>
-          <a href="#"
-            class="nav-item flex items-center gap-4 text-white py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-blue-500 rounded-md">
-            <i class="fa-solid fa-house"></i><span>Inicio</span>
-          </a>
-        </li>
-        <li>
-          <a href="#"
-            class="nav-item flex items-center gap-4 text-white py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-blue-500 rounded-md">
-            <i class="fa-solid fa-bell"></i><span>Notificaciones</span>
-          </a>
-        </li>
-        <li>
-          <a href="#"
-            class="nav-item flex items-center gap-4 text-white py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-blue-500 rounded-md">
-            <i class="fa-solid fa-gear"></i><span>Configuración</span>
-          </a>
-        </li>
-        <li>
-          <a href="#"
-            class="flex items-center gap-4 text-white py-3 px-2 whitespace-nowrap no-underline transition duration-300 ease-in-out hover:bg-red-500 rounded-md">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Salir</span>
-          </a>
-        </li>
-      </ul>
-    </aside>
+  <!-- Posible navbar -->
 
-
-  <main class="flex-1 p-8 ml-16 text-center">
+  <main class="flex-1 p-8 text-center">
     <div
-      class="fixed top-0 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-80 mb-6 mt-6">
+      class="fixed top-0 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-80 mb-6 mt-6">
       <div class="search flex justify-center p-4">
         <input
           class="p-4 w-3/4 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-400 placeholder:text-gray-400"
@@ -56,20 +27,6 @@
         </button>
       </div>
     </div>
-
-    <!-- Weather info "cards" -->
-    <!-- <div class="weather p-3 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl transition-transform duration-300 ease-in-out w-[450px]"
-      style="display: none;">
-      <h1 class="city"></h1>
-      <div class="flex items-center justify-center">
-        <img id="weather-icon" src="" alt="weather-icon">
-      </div>
-      <h2 class="temp"></h2>
-      <div class="details">
-        <p class="humidity"></p>
-        <p class="wind"></p>
-      </div>
-    </div> -->
     
     <!-- ! --><!-- FIXME: Error consola -->
     <!-- ? PARA ARREGLARLO AÑADIR 'WEATHER' AL CLASS DE TODOS LOS DIV'S -->
@@ -78,14 +35,14 @@
 
     <div class="grid grid-cols-12 gap-6">
       <!-- City info -->
-      <div class="weather col-span-3 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left"> <!-- TODO: Añadir hidden (display:none)-->
+      <div class="weather col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left "> <!-- TODO: Añadir hidden (display:none)-->
         <div class="city text-xl font-bold">Ciudad</div>
         <span class="country"></span>
         <div id="time"></div>
         <!-- TODO: reestructurar como se muestra icono, temp, etc. -->
         <div class="flex flex-col items-center mt-4">
           <div class="flex items-center">
-              <img id="weather-icon" class="w-24 h-24" src="#" alt="weather-icon">
+              <img id="weather-icon" class="w-24 h-24" src="assets/images/default.svg" alt="weather-icon">
               <div class="ml-4">
                   <div class="font-bold text-5xl leading-none mb-1">
                       <span class="temp">?</span>
@@ -111,17 +68,17 @@
       </div>
       </div>
       <!-- City map -->
-      <div class="col-span-6 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+      <div class="col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
         <div class="text-xl font-bold">Mapa</div>
       </div>
       <!-- Popular cities -->
-      <div class="col-span-3 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+      <div class="col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
         <div class="text-xl font-bold">Otras ciudades</div>
 
       </div>
       <!-- Segunda fila -->
       <!-- Forecast -->
-        <div class="forecast col-span-4 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left">
+        <div class="forecast col-span-4 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left">
           <div class="flex justify-between items-center mb-4">
             <div class="text-xl font-bold">Previsión</div>
             <div class="forecast-buttons">
@@ -137,7 +94,7 @@
       
       <!-- Summary -->
       <!-- ? Añadir botones para cambiar entre resumen semanal, por horas y más detalles -->
-      <div class="col-span-8 bg-white/30 backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+      <div class="col-span-8 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
         <div class="text-xl font-bold">Resumen</div>
         <div class="grid grid-cols-2 gap-4"></div>
       </div>
