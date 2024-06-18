@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 /* Sidebar menu */
-.active {
+/* .active {
     background-color: rgb(96 165 250);
     color: blue;
+} */
+
+.sidebar:hover {
+    width: 16rem/* 256px */;
 }
 
 /* Main */
