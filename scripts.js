@@ -17,8 +17,7 @@ const themeToggleButton = document.getElementById('theme-toggle');
     });
 
 // Main
-const apiUrl =
-  "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
 const apiKey = "eb09705f59f13d948efa3f16fa466a92";
 
 const searchBox = document.querySelector(".search input");
@@ -56,14 +55,6 @@ async function checkWeather(city) {
     document.querySelector(".temp").innerHTML = Math.round(data.main.temp);
     document.querySelector(".humidity").innerHTML = `${data.main.humidity}%`;
     document.querySelector(".wind").innerHTML = `${data.wind.speed}km/h`;
-
-    // Añade datos de lluvia si llueve
-    const rainContainer = document.querySelector(".rain-container");
-    if (data.rain && data.rain["1h"]) {
-      rainContainer.innerHTML = `<i class="fa-solid fa-droplet"></i><p class="ml-1">${data.rain["1h"]}mm/h</p>`;
-    } else {
-      rainContainer.innerHTML = "";
-    }
 
     // Funcion para obtener hora y dia
     function getCurrentTimeAndDay(timezoneOffset) {
@@ -115,6 +106,29 @@ async function checkWeather(city) {
     document
       .querySelector(".forecast-buttons button:nth-child(2)")
       .addEventListener("click", () => updateForecast(5, data));
+
+    // Mapa
+    const mapIframe = document.getElementById("map-iframe");
+    const lat = data.coord.lat;
+    const lon = data.coord.lon;
+    mapIframe.src = `https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&width=650&height=450&zoom=5&level=surface&overlay=rain&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1`;
+    
+    const hideElements = () => {
+      const iframeDocument = mapIframe.contentDocument || mapIframe.contentWindow.document;
+      const cookieBanner = iframeDocument.querySelector(".cookie-banner"); // Ajusta el selector según sea necesario
+      const header = iframeDocument.querySelector(".openweathermap-header"); // Ajusta el selector según sea necesario
+      if (cookieBanner) cookieBanner.style.display = 'none';
+      if (header) header.style.display = 'none';
+    };
+
+     // Intentar ocultar los elementos no deseados repetidamente por unos segundos
+     let attempts = 0;
+     const maxAttempts = 10;
+     const intervalId = setInterval(() => {
+       hideElements();
+       attempts += 1;
+       if (attempts >= maxAttempts) clearInterval(intervalId);
+     }, 500);
   } catch (error) {
     console.error("Error fetching weather data:", error);
     document.querySelector(".weather").style.display = "none";
@@ -128,11 +142,7 @@ async function getForecastByCoordinates(latitude, longitude) {
   try {
     const apiUrl = "https://api.openweathermap.org/data/2.5/forecast";
     const apiKey = "eb09705f59f13d948efa3f16fa466a92";
-
-    // Realizar la solicitud para obtener la prevision del tiempo
-    const forecastResponse = await fetch(
-      `${apiUrl}?units=metric&lat=${latitude}&lon=${longitude}&appid=${apiKey}`
-    );
+    const forecastResponse = await fetch(`${apiUrl}?units=metric&lat=${latitude}&lon=${longitude}&appid=${apiKey}`); // Realizar la solicitud para obtener la prevision del tiempo
     const forecastData = await forecastResponse.json();
 
     if (forecastResponse.status === 404) {
