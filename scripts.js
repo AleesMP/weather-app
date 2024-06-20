@@ -167,8 +167,8 @@ async function updateForecast(numDays, weatherData) {
         const hour = dateTime.getUTCHours();
 
         // Asegurarse de seleccionar los datos cerca de las 12 del mediodía
-        if (hour >= 3 && hour <= 21) {
-          // Ajustar según la ventana horaria deseada (10:00 - 21:00)
+        if (hour >= 10 && hour <= 13) {
+          // Ajustar según la ventana horaria deseada (10:00 - 13:00)
           const date = item.dt_txt.split(" ")[0]; // Obtener solo la fecha (YYYY-MM-DD)
           if (!dailyForecasts[date]) {
             dailyForecasts[date] = {
@@ -195,17 +195,13 @@ async function updateForecast(numDays, weatherData) {
       // Obtener las claves (fechas) y limitarlas a 'numDays'
       const dates = Object.keys(dailyForecasts).slice(0, numDays);
 
-      // Iterar sobre las fechas seleccionadas y mostrar la previsión
+      // Iterar sobre las fechas seleccionadas y mostrar la prevision
       dates.forEach((date) => {
         const forecast = dailyForecasts[date];
 
-        // Crear elemento de pronóstico con clases de Tailwind CSS
+        // Crear elemento de pronóstico con clases de Tailwind
         const forecastItem = document.createElement("div");
-        forecastItem.classList.add(
-          "flex",
-          "items-center",
-          "justify-center"
-        );
+        forecastItem.classList.add("flex", "items-center", "justify-between", "space-x-4", "p-2", "bg-white", "bg-opacity-50", "rounded-lg");
 
         // Obtener la fecha y hora del texto
         const dateTimeString = forecast.dt_txt;
@@ -220,7 +216,7 @@ async function updateForecast(numDays, weatherData) {
           dateTime.getMonth()
         )}, ${dayOfWeek}`;
 
-        // Obtener temp_max y temp_min sin redondear al siguiente entero
+        // Obtener temp_max y temp_min redondeados al siguiente entero
         const tempMax = Math.round(forecast.temp_max);
         const tempMin = Math.round(forecast.temp_min);
 
@@ -230,14 +226,12 @@ async function updateForecast(numDays, weatherData) {
 
         // Añadir la imagen del icono a la previsión
         forecastItem.innerHTML = `
-          <div class="forecast-item flex items-center justify-between space-x-4">
-            <div class="forecast-icon-temp flex items-center space-x-2 w-32">
-              <img src="${iconUrl}" alt="Weather icon" class="w-8 h-8">
-              <div class="forecast-temp text-base font-semibold">${tempMax}/${tempMin}º</div>
-            </div>
-            <div class="forecast-description text-right w-20 text-xs">${forecast.description}</div>
-             <div class="forecast-date text-xs w-20">${formattedDate}</div>
+          <div class="flex items-center space-x-2">
+            <img src="${iconUrl}" alt="Weather icon" class="w-8 h-8">
+            <div class="text-lg font-semibold">${tempMax}º / ${tempMin}º</div>
+            <div class="text-sm text-center w-32">${forecast.description}</div>
           </div>
+          <div class="text-right text-sm">${formattedDate}</div>
         `;
 
         forecastContainer.appendChild(forecastItem);
@@ -246,18 +240,8 @@ async function updateForecast(numDays, weatherData) {
       // Función para obtener el nombre del mes a partir de su número
       function getMonthName(monthIndex) {
         const months = [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
         ];
         return months[monthIndex];
       }
@@ -269,6 +253,22 @@ async function updateForecast(numDays, weatherData) {
   }
 }
 
+// Funcion para que el boton de "3 days" esté activo por defecto
+document.querySelector('.forecast-buttons').addEventListener('click', (event) => {
+  if (event.target.tagName === 'BUTTON') {
+    // Remover clase activa de todos los botones
+    document.querySelectorAll('.forecast-buttons button').forEach(button => {
+      button.classList.remove('active');
+    });
+
+    // Añadir clase activa al botón clicado
+    event.target.classList.add('active');
+
+    // Determinar el número de días según el botón clicado
+    const numDays = event.target.textContent === '3 days' ? 3 : 5;
+    updateForecast(numDays, weatherData); // Aquí debes asegurar que `weatherData` está definido correctamente
+  }
+});
 
 // Evento para buscar la ciudad
 // boton buscar

@@ -13,7 +13,7 @@
 <body class="flex">
   <!-- Nabvar -->
   <div
-    class="fixed flex px-6 py-4 justify-between items-center top-0 left-0 w-full custom-bg-opacity shadow-2xl  ">
+    class="fixed flex px-6 py-4 justify-between items-center top-0 left-0 w-full custom-bg-opacity shadow-2xl">
     <div class="text-white text-2xl font-bold">
       <i class="fa-solid fa-cloud-sun-rain"></i><span class="ml-2">Weather</span>
     </div>
@@ -22,7 +22,7 @@
         class="p-4 w-96 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-400 placeholder:text-gray-400"
         type="text" placeholder="Buscar por ciudad" spellcheck="false"> 
       <button
-        class="p-4 ml-2 bg-blue-400 text-white border-none rounded-lg text-base cursor-pointer transition duration-300 ease-in-out hover:bg-blue-500">
+        class="p-4 ml-2 bg-blue-400 text-white border-none rounded-lg text-base cursor-pointer transition duration-200 ease-in-out hover:bg-blue-500 shadow-lg">
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
     </div>
@@ -90,11 +90,11 @@
       <div class="forecast col-span-4 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left">
         <div class="flex justify-between mb-4">
           <div class="text-xl font-bold">Previsión</div>
-          <div class="forecast-buttons ">
-            <button class="btn btn-primary flex-1 focus:bg-blue-800 hover:bg-blue-700">3 días</button>
-            <button class="btn btn-primary flex-1 focus:bg-blue-800 hover:bg-blue-700">5 días</button>
+          <div class="forecast-buttons flex space-x-0 bg-white bg-opacity-50 rounded-lg">
+              <button class="btn btn-primary flex-1 focus:bg-white hover:bg-slate-200 rounded-l-lg p-2 active">3 days</button>
+              <button class="btn btn-primary flex-1 focus:bg-white hover:bg-slate-200 rounded-r-lg p-2">5 days</button>
           </div>
-        </div>
+      </div>
         <div class="forecast-container space-y-2">
           <!-- Aquí se añadirán dinámicamente los datos de la previsión -->
         </div>

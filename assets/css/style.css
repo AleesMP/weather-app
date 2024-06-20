@@ -19,3 +19,17 @@ body {
   background-color: rgba(255, 255, 255, 0.3); 
 }
 
+.forecast-buttons button {
+  border: none;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+}
+
+.forecast-buttons button.active {
+  background-color: white; /* Azul claro para el botón activo */
+  color: black;
+}
+
+.forecast-buttons button:not(:last-child) {
+  border-right: 1px solid white; /* Línea de separación entre botones */
+}
