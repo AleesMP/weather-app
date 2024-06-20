@@ -25,7 +25,9 @@ const searchBox = document.querySelector(".search input");
 const searchBtn = document.querySelector(".search button");
 const weatherIcon = document.querySelector("#weather-icon");
 const forecastContainer = document.querySelector(".forecast-container");
+let weatherData; // Variable global para almacenar los datos del clima
 
+// Función para obtener datos del clima por ciudad
 async function checkWeather(city) {
   try {
     const response = await fetch(
@@ -38,6 +40,9 @@ async function checkWeather(city) {
       document.querySelector(".error").style.display = "block";
       return;
     }
+
+    // Actualizar weatherData con los datos obtenidos
+    weatherData = data;
 
     // Icono del tiempo actual
     function updateWeatherIcon(data) {
@@ -145,7 +150,7 @@ async function getForecastByCoordinates(latitude, longitude) {
   }
 }
 
-// Forecast
+// Forecast ------
 // Funcion para actualizar getForecastByCoordinates
 async function updateForecast(numDays, weatherData) {
   try {
@@ -201,7 +206,9 @@ async function updateForecast(numDays, weatherData) {
 
         // Crear elemento de pronóstico con clases de Tailwind
         const forecastItem = document.createElement("div");
-        forecastItem.classList.add("flex", "items-center", "justify-between", "space-x-4", "p-2", "bg-white", "bg-opacity-50", "rounded-lg");
+        forecastItem.classList.add(
+          "flex", "items-center", "justify-between", "space-x-4", "p-2", "bg-white", "bg-opacity-50", "rounded-lg"
+        );
 
         // Obtener la fecha y hora del texto
         const dateTimeString = forecast.dt_txt;
@@ -266,7 +273,9 @@ document.querySelector('.forecast-buttons').addEventListener('click', (event) =>
 
     // Determinar el número de días según el botón clicado
     const numDays = event.target.textContent === '3 days' ? 3 : 5;
-    updateForecast(numDays, weatherData); // Aquí debes asegurar que `weatherData` está definido correctamente
+    
+    // Llamar a updateForecast con el número de días y weatherData definido en otro contexto
+    updateForecast(numDays, weatherData); // Asegúrate de que weatherData esté definido y accesible aquí
   }
 });
 
