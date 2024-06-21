@@ -1,20 +1,20 @@
 // Navbar
 // Light/Dark switch
 const themeToggleButton = document.getElementById('theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
+const themeIcon = document.getElementById('theme-icon');
 
-    themeToggleButton.addEventListener('click', () => {
-      const htmlClasses = document.documentElement.classList;
-      if (htmlClasses.contains('dark')) {
-        htmlClasses.remove('dark');
-        themeIcon.classList.remove('fa-sun');
-        themeIcon.classList.add('fa-moon');
-      } else {
-        htmlClasses.add('dark');
-        themeIcon.classList.remove('fa-moon');
-        themeIcon.classList.add('fa-sun');
-      }
-    });
+themeToggleButton.addEventListener('click', () => {
+  const htmlClasses = document.documentElement.classList;
+  if (htmlClasses.contains('dark')) {
+    htmlClasses.remove('dark');
+    themeIcon.classList.remove('fa-sun');
+    themeIcon.classList.add('fa-moon');
+  } else {
+    htmlClasses.add('dark');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+  }
+});
 
 // Main
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
@@ -51,10 +51,18 @@ async function checkWeather(city) {
 
     // Obtener datos
     document.querySelector(".city").innerHTML = `${data.name}, ${data.sys.country}`;
-    document.querySelector(".description").innerHTML =data.weather[0].description;
+    document.querySelector(".description").innerHTML = data.weather[0].description;
     document.querySelector(".temp").innerHTML = Math.round(data.main.temp);
     document.querySelector(".humidity").innerHTML = `${data.main.humidity}%`;
     document.querySelector(".wind").innerHTML = `${data.wind.speed}km/h`;
+
+    // Añade datos de lluvia si llueve
+    const rainContainer = document.querySelector(".rain-container");
+    if (data.rain && data.rain['1h']) {
+      rainContainer.innerHTML = `<i class="fa-solid fa-droplet"></i><p class="ml-1">${data.rain['1h']}mm/h</p>`;
+    } else {
+      rainContainer.innerHTML = '';
+    }
 
     // Funcion para obtener hora y dia
     function getCurrentTimeAndDay(timezoneOffset) {
@@ -99,20 +107,12 @@ async function checkWeather(city) {
     // Actualizar la prevision inicial para 3 dias por defecto
     updateForecast(3, data);
 
-    // Añadir eventos a los botones
-    document
-      .querySelector(".forecast-buttons button:nth-child(1)")
-      .addEventListener("click", () => updateForecast(3, data));
-    document
-      .querySelector(".forecast-buttons button:nth-child(2)")
-      .addEventListener("click", () => updateForecast(5, data));
-
     // Mapa
     const mapIframe = document.getElementById("map-iframe");
     const lat = data.coord.lat;
     const lon = data.coord.lon;
     mapIframe.src = `https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&width=650&height=450&zoom=5&level=surface&overlay=rain&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1`;
-    
+
     const hideElements = () => {
       const iframeDocument = mapIframe.contentDocument || mapIframe.contentWindow.document;
       const cookieBanner = iframeDocument.querySelector(".cookie-banner"); // Ajusta el selector según sea necesario
@@ -121,14 +121,14 @@ async function checkWeather(city) {
       if (header) header.style.display = 'none';
     };
 
-     // Intentar ocultar los elementos no deseados repetidamente por unos segundos
-     let attempts = 0;
-     const maxAttempts = 10;
-     const intervalId = setInterval(() => {
-       hideElements();
-       attempts += 1;
-       if (attempts >= maxAttempts) clearInterval(intervalId);
-     }, 500);
+    // Intentar ocultar los elementos no deseados repetidamente por unos segundos
+    let attempts = 0;
+    const maxAttempts = 10;
+    const intervalId = setInterval(() => {
+      hideElements();
+      attempts += 1;
+      if (attempts >= maxAttempts) clearInterval(intervalId);
+    }, 500);
   } catch (error) {
     console.error("Error fetching weather data:", error);
     document.querySelector(".weather").style.display = "none";
@@ -175,13 +175,13 @@ async function updateForecast(numDays, weatherData) {
       const forecastContainer = document.querySelector(".forecast-container");
       forecastContainer.innerHTML = "";
 
-      // Filtrar y agrupar los datos por día cerca de las 12 del mediodía
+      // Filtrar y agrupar los datos por día
       const dailyForecasts = {};
       forecastData.list.forEach((item) => {
         const dateTime = new Date(item.dt_txt);
         const hour = dateTime.getUTCHours();
 
-        // Asegurarse de seleccionar los datos cerca de las 12 del mediodía
+        // Asegurarse de seleccionar los datos
         if (hour >= 10 && hour <= 13) {
           // Ajustar según la ventana horaria deseada (10:00 - 13:00)
           const date = item.dt_txt.split(" ")[0]; // Obtener solo la fecha (YYYY-MM-DD)
@@ -241,7 +241,7 @@ async function updateForecast(numDays, weatherData) {
         const iconCode = forecast.weather.icon;
         const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
-        // Añadir la imagen del icono a la previsión
+        // Construir el contenido HTML para cada pronóstico
         forecastItem.innerHTML = `
           <div class="flex items-center space-x-2">
             <img src="${iconUrl}" alt="Weather icon" class="w-8 h-8">
@@ -251,54 +251,41 @@ async function updateForecast(numDays, weatherData) {
           <div class="text-right text-sm">${formattedDate}</div>
         `;
 
+        // Añadir el elemento de pronóstico al contenedor
         forecastContainer.appendChild(forecastItem);
       });
-
-      // Función para obtener el nombre del mes a partir de su número
-      function getMonthName(monthIndex) {
-        const months = [
-          "January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "December"
-        ];
-        return months[monthIndex];
-      }
-    } else {
-      console.error("No forecast data available");
     }
   } catch (error) {
     console.error("Error updating forecast:", error);
   }
 }
 
-// Funcion para que el boton de "3 days" esté activo por defecto
-document.querySelector('.forecast-buttons').addEventListener('click', (event) => {
-  if (event.target.tagName === 'BUTTON') {
-    // Remover clase activa de todos los botones
-    document.querySelectorAll('.forecast-buttons button').forEach(button => {
-      button.classList.remove('active');
-    });
+// Obtener el nombre del mes
+function getMonthName(monthIndex) {
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  return monthNames[monthIndex];
+}
 
-    // Añadir clase activa al botón clicado
-    event.target.classList.add('active');
+//! // FIXME: boton de 3/5 days no se mantiene al hacer clic
 
-    // Determinar el número de días según el botón clicado
-    const numDays = event.target.textContent === '3 days' ? 3 : 5;
-    
-    // Llamar a updateForecast con el número de días y weatherData definido en otro contexto
-    updateForecast(numDays, weatherData); // Asegúrate de que weatherData esté definido y accesible aquí
-  }
-});
-
-// Evento para buscar la ciudad
-// boton buscar
+// Evento de búsqueda
 searchBtn.addEventListener("click", () => {
   checkWeather(searchBox.value);
 });
 
-// tecla "Enter"
-searchBox.addEventListener("keydown", (event) => {
+// Añadir eventos a los botones
+document
+  .querySelector(".forecast-buttons button:nth-child(1)")
+  .addEventListener("click", () => updateForecast(3, weatherData));
+document
+  .querySelector(".forecast-buttons button:nth-child(2)")
+  .addEventListener("click", () => updateForecast(5, weatherData));
+
+document.querySelector(".search input").addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     checkWeather(searchBox.value);
   }
 });
-
