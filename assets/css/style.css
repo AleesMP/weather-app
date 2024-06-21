@@ -26,6 +26,10 @@ body {
   background-color: transparent;
 }
 
+.forecast-buttons :hover {
+  background-color: rgb(226, 229, 240);
+}
+
 .forecast-buttons button.active {
   background-color: white; /* Azul claro para el botón activo */
   color: black;

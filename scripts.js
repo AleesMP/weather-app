@@ -104,31 +104,16 @@ async function checkWeather(city) {
 
     updateWeatherIcon(data);
 
-    // Actualizar la prevision inicial para 3 dias por defecto
+    // Resetear los botones y actualizar la prevision inicial para 3 dias por defecto
+    resetButtons();
     updateForecast(3, data);
 
     // Mapa
     const mapIframe = document.getElementById("map-iframe");
     const lat = data.coord.lat;
     const lon = data.coord.lon;
-    mapIframe.src = `https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&width=650&height=450&zoom=5&level=surface&overlay=rain&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1`;
+    mapIframe.src = `https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&width=650&height=450&zoom=7&level=surface&overlay=rain&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1`;
 
-    const hideElements = () => {
-      const iframeDocument = mapIframe.contentDocument || mapIframe.contentWindow.document;
-      const cookieBanner = iframeDocument.querySelector(".cookie-banner"); // Ajusta el selector según sea necesario
-      const header = iframeDocument.querySelector(".openweathermap-header"); // Ajusta el selector según sea necesario
-      if (cookieBanner) cookieBanner.style.display = 'none';
-      if (header) header.style.display = 'none';
-    };
-
-    // Intentar ocultar los elementos no deseados repetidamente por unos segundos
-    let attempts = 0;
-    const maxAttempts = 10;
-    const intervalId = setInterval(() => {
-      hideElements();
-      attempts += 1;
-      if (attempts >= maxAttempts) clearInterval(intervalId);
-    }, 500);
   } catch (error) {
     console.error("Error fetching weather data:", error);
     document.querySelector(".weather").style.display = "none";
@@ -269,20 +254,37 @@ function getMonthName(monthIndex) {
   return monthNames[monthIndex];
 }
 
-//! // FIXME: boton de 3/5 days no se mantiene al hacer clic
+// Funcion para resetear los botones "3/5 days" a su estado inicial
+function resetButtons() {
+  const buttons = document.querySelectorAll('.forecast-buttons button');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  buttons[0].classList.add('active');
+}
 
-// Evento de búsqueda
-searchBtn.addEventListener("click", () => {
-  checkWeather(searchBox.value);
+// Eventos de los botones "3/5 days"
+document.addEventListener('DOMContentLoaded', () => {
+  const buttons = document.querySelectorAll('.forecast-buttons button');
+  buttons.forEach((button, index) => {
+    button.addEventListener('click', () => {
+      buttons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      const days = index === 0 ? 3 : 5;
+      updateForecast(days, weatherData);
+    });
+  });
 });
 
-// Añadir eventos a los botones
 document
   .querySelector(".forecast-buttons button:nth-child(1)")
   .addEventListener("click", () => updateForecast(3, weatherData));
 document
   .querySelector(".forecast-buttons button:nth-child(2)")
   .addEventListener("click", () => updateForecast(5, weatherData));
+
+// Evento de búsqueda
+searchBtn.addEventListener("click", () => {
+  checkWeather(searchBox.value);
+});
 
 document.querySelector(".search input").addEventListener("keydown", (event) => {
   if (event.key === "Enter") {

@@ -78,8 +78,7 @@
       <div class="col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
         <div class="map-container relative rounded-lg overflow-hidden" style="padding-bottom: 40%; height: 0;">
           <iframe id="map-iframe" class="absolute top-0 left-0 w-full h-full rounded-lg" frameborder="0"
-            style="border:0" allowfullscreen="" aria-hidden="false" tabindex="0"
-            src="https://embed.windy.com/embed2.html?lat=39.4667&lon=-0.37500&detailLat=50.0791&detailLon=14.4301&width=650&height=450&zoom=5&level=surface&overlay=rain&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1"></iframe>
+            style="border:0" allowfullscreen="" aria-hidden="false" tabindex="0" src=""></iframe>
         </div>
       </div>
       <!-- Popular cities -->
@@ -89,15 +88,15 @@
       </div>
       <!-- Segunda fila -->
       <!-- Forecast -->
-      <div class="forecast col-span-4 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left">
+      <div class="forecast col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left">
         <div class="flex justify-between mb-4">
-          <div class="text-xl font-bold">Previsión</div>
+          <div class="text-xl font-bold">Forecast</div>
           <div class="forecast-buttons flex space-x-0 bg-white bg-opacity-50 rounded-lg">
             <button
-              class="flex-1 focus:bg-white focus:outline-none hover:bg-slate-200 rounded-l-lg p-2 active">3
+              class="flex-1 focus:bg-white focus:outline-none rounded-l-lg p-2 active">3
               days</button>
             <button
-              class="flex-1 focus:bg-white focus:outline-none hover:bg-slate-200 rounded-r-lg p-2">5
+              class="flex-1 focus:bg-white focus:outline-none rounded-r-lg p-2">5
               days</button>
           </div>
         </div>
@@ -109,7 +108,7 @@
 
       <!-- Summary -->
       <!-- ? Añadir botones para cambiar entre resumen semanal, por horas y más detalles -->
-      <div class="col-span-8 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center ">
+      <div class="col-span-9 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center ">
         <div class="text-xl font-bold">Resumen</div>
         <div class="grid grid-cols-2 gap-4"></div>
       </div>
@@ -119,7 +118,7 @@
     <!-- Error: city not found -->
     <div class="error text-center text-slate-500 items-center justify-center z-50 hidden">
       <img src="assets/images/default.svg" alt="default image" class="w-10 h-10 mx-auto mb-2">
-      <p class="text-black">Ciudad no encontrada</p>
+      <p class="text-black">City not found</p>
     </div>
 
   </main>
