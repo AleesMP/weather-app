@@ -55,15 +55,10 @@ async function checkWeather(city) {
     document.querySelector(".temp").innerHTML = Math.round(data.main.temp);
     document.querySelector(".humidity").innerHTML = `${data.main.humidity}%`;
     document.querySelector(".wind").innerHTML = `${data.wind.speed}km/h`;
-
-    // Añade datos de lluvia si llueve
-    const rainContainer = document.querySelector(".rain-container");
-    if (data.rain && data.rain['1h']) {
-      rainContainer.innerHTML = `<i class="fa-solid fa-droplet"></i><p class="ml-1">${data.rain['1h']}mm/h</p>`;
-    } else {
-      rainContainer.innerHTML = '';
-    }
-
+    document.querySelector(".pressure").innerHTML = `${data.main.pressure}`;
+    document.querySelector('.sunrise').innerHTML = convertUnixTimestamp(data.sys.sunrise);
+    document.querySelector('.sunset').innerHTML = convertUnixTimestamp(data.sys.sunset);
+   
     // Funcion para obtener hora y dia
     function getCurrentTimeAndDay(timezoneOffset) {
       const now = new Date();
@@ -98,6 +93,22 @@ async function checkWeather(city) {
     const { dayOfWeek, formattedTime } = getCurrentTimeAndDay(data.timezone);
     const h2Hour = document.getElementById("time");
     h2Hour.textContent = `${dayOfWeek}, ${formattedTime}`;
+
+     // Añade datos de lluvia si llueve
+     const rainContainer = document.querySelector(".rain-container");
+     if (data.rain && data.rain['1h']) {
+       rainContainer.innerHTML = `<i class="fa-solid fa-droplet fa-lg"></i><p class="ml-1">${data.rain['1h']}mm/h</p>`;
+     } else {
+       rainContainer.innerHTML = '';
+     }
+
+    //  Tranforma y da fomrato a la hora de amanecer y atardecer
+     function convertUnixTimestamp(timestamp) {
+      const date = new Date(timestamp * 1000);
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+  }
 
     document.querySelector(".weather").style.display = "block";
     document.querySelector(".error").style.display = "none";
@@ -136,7 +147,7 @@ async function getForecastByCoordinates(latitude, longitude) {
     }
 
     // Log para verificar los datos
-    console.log(forecastData);
+    // console.log(forecastData);
 
     return forecastData; // Devolver los datos de la prevision del tiempo
   } catch (error) {
