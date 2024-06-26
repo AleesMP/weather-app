@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="./assets/css/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <title>Weather App</title>
 </head>
 
@@ -82,11 +82,8 @@
       </div>
       <!-- City map -->
       <div class="col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
-        <div class="map-container relative rounded-lg overflow-hidden" style="padding-bottom: 40%; height: 0;">
-          <iframe id="map-iframe" class="absolute top-0 left-0 w-full h-full rounded-lg" frameborder="0"
-            style="border:0" allowfullscreen="" aria-hidden="false" tabindex="0" src=""></iframe>
-        </div>
-      </div>
+        <div id="map" class="w-full h-full rounded-lg"></div>
+    </div>
       <!-- Popular cities -->
       <div class="col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center ">
         <div class="text-xl font-bold">Otras ciudades</div>
@@ -96,20 +93,16 @@
       <!-- Forecast -->
       <div class="forecast col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left">
         <div class="flex justify-between mb-4">
-          <div class="text-xl font-bold mt-2 ml-2">Forecast</div>
-          <div class="forecast-buttons flex space-x-0 bg-white bg-opacity-50 rounded-lg">
-            <button
-              class="flex-1 focus:bg-white focus:outline-none rounded-l-lg p-2 active">3
-              days</button>
-            <button
-              class="flex-1 focus:bg-white focus:outline-none rounded-r-lg p-2">5
-              days</button>
-          </div>
+            <div class="text-xl font-bold mt-2 ml-2">Forecast</div>
+            <div class="forecast-buttons flex space-x-0 bg-white bg-opacity-50 rounded-lg">
+                <button class="flex-1 focus:bg-white focus:outline-none rounded-l-lg p-2 active">3 days</button>
+                <button class="flex-1 focus:bg-white focus:outline-none rounded-r-lg p-2">5 days</button>
+            </div>
         </div>
         <div class="forecast-container space-y-2">
-          <!-- Aquí se añadirán dinámicamente los datos de la previsión -->
+            <!-- Aquí se añadirán dinámicamente los datos de la previsión -->
         </div>
-      </div>
+    </div>
 
 
       <!-- Summary -->
@@ -131,7 +124,10 @@
 
   </main>
 
+
   <script type="module" src="./scripts.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </body>
 
 </html>
