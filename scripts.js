@@ -125,10 +125,9 @@ async function updateHourlyChart(lat, lon) {
     });
 
     // Ajustar el tamaño del gráfico dinámicamente
-    const resizeObserver = new ResizeObserver(() => {
+    window.addEventListener('resize', () => {
       hourlyChart.resize();
-    });
-    resizeObserver.observe(ctx.canvas.parentNode);
+  });
 
   } catch (error) {
     console.error('Error fetching hourly data:', error);
