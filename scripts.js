@@ -55,80 +55,95 @@ async function updateHourlyChart(lat, lon) {
     const data = await response.json();
 
     if (response.status !== 200) {
-      console.error('Error al obtener los datos por horas:', data.message);
+      console.error("Error al obtener los datos por horas:", data.message);
       return;
     }
 
     const hourlyData = data.list.slice(0, 24); // Obtener las primeras 24 entradas
-    const labels = hourlyData.map(hour => new Date(hour.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    const temperatures = hourlyData.map(hour => hour.main.temp);
-    const weatherDescriptions = hourlyData.map(hour => hour.weather[0].description);
+    const labels = hourlyData.map((hour) =>
+      new Date(hour.dt * 1000).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    );
+    const temperatures = hourlyData.map((hour) => hour.main.temp);
+    const weatherDescriptions = hourlyData.map(
+      (hour) => hour.weather[0].description
+    );
 
     // Destruir el gráfico existente si ya existe
     if (hourlyChart) {
       hourlyChart.destroy();
     }
 
-    const ctx = document.getElementById('hourlyChart').getContext('2d');
+    const ctx = document.getElementById("hourlyChart").getContext("2d");
     hourlyChart = new Chart(ctx, {
-      type: 'line',
+      type: "line",
       data: {
         labels: labels,
-        datasets: [{
-          label: 'Temperatura (°C)',
-          data: temperatures,
-          borderColor: 'rgb(34, 132, 252)',
-          backgroundColor: 'rgba(75, 149, 192, 0.2)',
-          fill: true,
-          yAxisID: 'y',
-        }]
+        datasets: [
+          {
+            label: "Temperatura (°C)",
+            data: temperatures,
+            borderColor: "rgb(34, 132, 252)",
+            backgroundColor: "rgba(75, 149, 192, 0.2)",
+            fill: true,
+            yAxisID: "y",
+          },
+        ],
       },
       options: {
         responsive: true,
         plugins: {
           tooltip: {
             callbacks: {
-              title: function(tooltipItems) {
+              title: function (tooltipItems) {
                 return tooltipItems[0].label;
               },
-              label: function(tooltipItem) {
+              label: function (tooltipItem) {
                 const temperature = `Temperatura: ${tooltipItem.raw}°C`;
-                const description = `Descripción: ${weatherDescriptions[tooltipItem.dataIndex]}`;
+                const description = `Descripción: ${
+                  weatherDescriptions[tooltipItem.dataIndex]
+                }`;
                 return [temperature, description].filter(Boolean);
-              }
-            }
+              },
+            },
           },
           legend: {
-            display: false
+            display: false,
           },
           title: {
             display: true,
-            text: 'Clima por Horas'
-          }
+            text: "Clima por Horas",
+          },
         },
         scales: {
           x: {
             title: {
               display: true,
-              text: 'Hora'
-            }
+              text: "Hora",
+            },
           },
           y: {
             title: {
               display: true,
-              text: 'Temperatura (°C)'
+              text: "Temperatura (°C)",
             },
-            position: 'left',
-          }
-        }
-      }
+            position: "left",
+          },
+        },
+      },
     });
 
     // Ajustar el tamaño del gráfico dinámicamente
-    window.addEventListener('resize', () => {
-      hourlyChart.resize();
-  });
+    const chartContainer = document.getElementById("hourlyChart").parentNode;
 
+    const resizeObserver = new ResizeObserver(() => {
+      hourlyChart.resize();
+    });
+
+    resizeObserver.observe(chartContainer);
+    
   } catch (error) {
     console.error('Error fetching hourly data:', error);
   }
