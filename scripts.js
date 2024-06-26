@@ -25,13 +25,120 @@ const searchBtn = document.querySelector(".search button");
 const weatherIcon = document.querySelector("#weather-icon");
 const forecastContainer = document.querySelector(".forecast-container");
 let weatherData; // Variable global para almacenar los datos del clima
+let hourlyChart; // Variable para almacenar la instancia del gráfico
+
+// Función para obtener y mostrar el resumen del clima
+async function updateSummary(city) {
+  try {
+    const summaryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    const response = await fetch(summaryUrl);
+    const data = await response.json();
+
+    if (response.status !== 200) {
+      console.error('Error al obtener el resumen del clima:', data.message);
+      return;
+    }
+
+    // Llamar a la función para actualizar el gráfico por horas
+    await updateHourlyChart(data.coord.lat, data.coord.lon);
+
+  } catch (error) {
+    console.error('Error fetching summary data:', error);
+  }
+}
+
+// Función para actualizar el gráfico por horas
+async function updateHourlyChart(lat, lon) {
+  try {
+    const hourlyUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+    const response = await fetch(hourlyUrl);
+    const data = await response.json();
+
+    if (response.status !== 200) {
+      console.error('Error al obtener los datos por horas:', data.message);
+      return;
+    }
+
+    const hourlyData = data.list.slice(0, 24); // Obtener las primeras 24 entradas
+    const labels = hourlyData.map(hour => new Date(hour.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const temperatures = hourlyData.map(hour => hour.main.temp);
+    const weatherDescriptions = hourlyData.map(hour => hour.weather[0].description);
+
+    // Destruir el gráfico existente si ya existe
+    if (hourlyChart) {
+      hourlyChart.destroy();
+    }
+
+    const ctx = document.getElementById('hourlyChart').getContext('2d');
+    hourlyChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Temperatura (°C)',
+          data: temperatures,
+          borderColor: 'rgb(34, 132, 252)',
+          backgroundColor: 'rgba(75, 149, 192, 0.2)',
+          fill: true,
+          yAxisID: 'y',
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: function(tooltipItems) {
+                return tooltipItems[0].label;
+              },
+              label: function(tooltipItem) {
+                const temperature = `Temperatura: ${tooltipItem.raw}°C`;
+                const description = `Descripción: ${weatherDescriptions[tooltipItem.dataIndex]}`;
+                return [temperature, description].filter(Boolean);
+              }
+            }
+          },
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'Clima por Horas'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Hora'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Temperatura (°C)'
+            },
+            position: 'left',
+          }
+        }
+      }
+    });
+
+    // Ajustar el tamaño del gráfico dinámicamente
+    const resizeObserver = new ResizeObserver(() => {
+      hourlyChart.resize();
+    });
+    resizeObserver.observe(ctx.canvas.parentNode);
+
+  } catch (error) {
+    console.error('Error fetching hourly data:', error);
+  }
+}
 
 // Función para obtener datos del clima por ciudad
 async function checkWeather(city) {
   try {
-    const response = await fetch(
-      apiUrl + city + `&appid=${apiKey}&units=metric`
-    );
+    const response = await fetch(apiUrl + city + `&appid=${apiKey}&units=metric`);
     const data = await response.json();
 
     if (response.status === 404) {
@@ -54,40 +161,23 @@ async function checkWeather(city) {
     document.querySelector(".description").innerHTML = data.weather[0].description;
     document.querySelector(".temp").innerHTML = Math.round(data.main.temp);
     document.querySelector(".humidity").innerHTML = `${data.main.humidity}%`;
-    document.querySelector(".wind").innerHTML = `${data.wind.speed}km/h`;
-    document.querySelector(".pressure").innerHTML = `${data.main.pressure}`;
-    document.querySelector('.sunrise').innerHTML = convertUnixTimestamp(data.sys.sunrise);
-    document.querySelector('.sunset').innerHTML = convertUnixTimestamp(data.sys.sunset);
+    document.querySelector(".wind").innerHTML = `${data.wind.speed} km/h`;
+    document.querySelector(".pressure").innerHTML = `${data.main.pressure} hPa`;
    
     // Funcion para obtener hora y dia
     function getCurrentTimeAndDay(timezoneOffset) {
       const now = new Date();
       const localOffset = now.getTimezoneOffset() * 60000;
-      const localTime = new Date(
-        now.getTime() + localOffset + timezoneOffset * 1000
-      );
+      const localTime = new Date(now.getTime() + localOffset + timezoneOffset * 1000);
       let hours = localTime.getHours();
       const minutes = localTime.getMinutes();
-      const ampm = hours >= 12 ? "PM" : "AM";
+      const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12;
       hours = hours ? hours : 12;
-      const daysOfWeek = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
+      const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       const dayOfWeek = daysOfWeek[localTime.getDay()];
-      const formattedTime = `${hours}:${minutes
-        .toString()
-        .padStart(2, "0")} ${ampm}`;
-      return {
-        dayOfWeek,
-        formattedTime,
-      };
+      const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+      return { dayOfWeek, formattedTime };
     }
 
     const { dayOfWeek, formattedTime } = getCurrentTimeAndDay(data.timezone);
@@ -102,13 +192,7 @@ async function checkWeather(city) {
        rainContainer.innerHTML = '';
      }
 
-    //  Tranforma y da fomrato a la hora de amanecer y atardecer
-     function convertUnixTimestamp(timestamp) {
-      const date = new Date(timestamp * 1000);
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      return `${hours}:${minutes}`;
-  }
+    
 
     document.querySelector(".weather").style.display = "block";
     document.querySelector(".error").style.display = "none";
@@ -124,6 +208,9 @@ async function checkWeather(city) {
     const lat = data.coord.lat;
     const lon = data.coord.lon;
     mapIframe.src = `https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&detailLat=${lat}&detailLon=${lon}&width=650&height=450&zoom=7&level=surface&overlay=rain&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1`;
+
+    // Llamar a la función para actualizar el resumen
+    updateSummary(city);
 
   } catch (error) {
     console.error("Error fetching weather data:", error);
@@ -147,7 +234,7 @@ async function getForecastByCoordinates(latitude, longitude) {
     }
 
     // Log para verificar los datos
-    // console.log(forecastData);
+    console.log(forecastData);
 
     return forecastData; // Devolver los datos de la prevision del tiempo
   } catch (error) {
@@ -285,20 +372,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-document
-  .querySelector(".forecast-buttons button:nth-child(1)")
-  .addEventListener("click", () => updateForecast(3, weatherData));
-document
-  .querySelector(".forecast-buttons button:nth-child(2)")
-  .addEventListener("click", () => updateForecast(5, weatherData));
+document.querySelector(".forecast-buttons button:nth-child(1)").addEventListener("click", () => updateForecast(3, weatherData));
+document.querySelector(".forecast-buttons button:nth-child(2)").addEventListener("click", () => updateForecast(5, weatherData));
 
 // Evento de búsqueda
 searchBtn.addEventListener("click", () => {
   checkWeather(searchBox.value);
+  updateSummary(searchBox.value);
 });
 
 document.querySelector(".search input").addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     checkWeather(searchBox.value);
+    updateSummary(searchBox.value);
   }
 });

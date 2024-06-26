@@ -5,6 +5,7 @@
 /* Main */
 body {
   margin: 0;
+  padding-top: 6rem; 
   font-family: 'Montserrat', sans-serif;
   display: flex;
   justify-content: center;
@@ -13,6 +14,10 @@ body {
   /* background: linear-gradient(to right, #0e4069, #2196f3); */
   backdrop-filter: blur(15px);
   background-image: url(../images/background-sky.jpg);
+}
+
+main {
+  min-height: calc(100vh - 6rem); /* Calcula el mínimo alto del main para ocupar el espacio restante en la pantalla */
 }
 
 .custom-bg-opacity {
