@@ -35,16 +35,17 @@
 
   <main class="flex-1 p-8 overflow-y-auto">
 
-    <!-- ! --><!-- FIXME: Error consola -->
-    <!-- ? PARA ARREGLARLO AÑADIR 'WEATHER' AL CLASS DE TODOS LOS DIV'S -->
+    <div class="default-message text-center items-center justify-center">
+      <i class="fa-solid fa-magnifying-glass-location fa-3x"></i>
+      <p class="text-black">Introduce una ciudad para mostrar su información meteorológica</p>
+    </div>
 
-    <!-- TODO: Rellenar todas las "cards" con info -->
     <!-- TODO: añadir "dark:(con respectivo estilo)" para el switch light/dark -->
 
     <div class="grid grid-cols-12 gap-6">
 
       <!-- City info -->
-      <div class="weather col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left"><!-- TODO: Añadir hidden (display:none)-->
+      <div class="weather col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left hidden">
         <div class="mt-2 ml-2">
           <div class="city text-xl font-bold ">Ciudad</div>
           <span class="country"></span>
@@ -81,17 +82,18 @@
         </div>
       </div>
       <!-- City map -->
-      <div class="col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+      <div class="city-map col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center hidden">
         <div id="map" class="w-full h-full rounded-lg"></div>
     </div>
-      <!-- Popular cities -->
-      <div class="col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center ">
+    <!-- TODO: ver que informaion se añade aqui -->
+      <!-- History container -->
+      <div class="history-container col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center hidden">
         <div class="text-xl font-bold">Otras ciudades</div>
-
       </div>
+
       <!-- Segunda fila -->
       <!-- Forecast -->
-      <div class="forecast col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left">
+      <div class="forecast col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left hidden">
         <div class="flex justify-between mb-4">
             <div class="text-xl font-bold mt-2 ml-2">Forecast</div>
             <div class="forecast-buttons flex space-x-0 bg-white bg-opacity-50 rounded-lg">
@@ -102,11 +104,11 @@
         <div class="forecast-container space-y-2">
             <!-- Aquí se añadirán dinámicamente los datos de la previsión -->
         </div>
-    </div>
+      </div>
 
 
       <!-- Summary -->
-      <div class="col-span-9 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center">
+      <div class="summary col-span-9 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center hidden">
         <!-- Resumen -->
         <div class="summary-container grid grid-cols-2 gap-4"></div>
         <div class="chart-container mt-4 w-full">

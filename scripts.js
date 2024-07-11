@@ -50,8 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
   // Main
-  const apiUrl =
-    "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+  const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
   const apiKey = "eb09705f59f13d948efa3f16fa466a92";
 
   const searchBox = document.querySelector(".search input");
@@ -178,6 +177,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para obtener datos del clima por ciudad
   async function checkWeather(city) {
+
+    // Mensaje por defecto
+    const defaultMessage = document.querySelector(".default-message");
+    if (!city) {
+      defaultMessage.style.display = "block";
+      document.querySelector(".weather").style.display = "none";
+      document.querySelector(".city-map").style.display = "none";
+      document.querySelector(".history-container").style.display = "none";
+      document.querySelector(".forecast").style.display = "none";
+      document.querySelector(".summary").style.display = "none";
+      document.querySelector(".error").style.display = "none";
+      return;
+    }
+
     try {
       const response = await fetch(
         apiUrl + city + `&appid=${apiKey}&units=metric`
@@ -185,7 +198,12 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = await response.json();
 
       if (response.status === 404) {
+        defaultMessage.style.display = "none";
         document.querySelector(".weather").style.display = "none";
+        document.querySelector(".city-map").style.display = "none";
+        document.querySelector(".history-container").style.display = "none";
+        document.querySelector(".forecast").style.display = "none";
+        document.querySelector(".summary").style.display = "none";
         document.querySelector(".error").style.display = "block";
         return;
       }
@@ -200,43 +218,26 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Obtener datos
-      document.querySelector(
-        ".city"
-      ).innerHTML = `${data.name}, ${data.sys.country}`;
-      document.querySelector(".description").innerHTML =
-        data.weather[0].description;
+      document.querySelector(".city").innerHTML = `${data.name}, ${data.sys.country}`;
+      document.querySelector(".description").innerHTML =data.weather[0].description;
       document.querySelector(".temp").innerHTML = Math.round(data.main.temp);
       document.querySelector(".humidity").innerHTML = `${data.main.humidity}%`;
       document.querySelector(".wind").innerHTML = `${data.wind.speed} km/h`;
-      document.querySelector(
-        ".pressure"
-      ).innerHTML = `${data.main.pressure} hPa`;
+      document.querySelector(".pressure").innerHTML = `${data.main.pressure} hPa`;
 
       // Funcion para obtener hora y dia
       function getCurrentTimeAndDay(timezoneOffset) {
         const now = new Date();
         const localOffset = now.getTimezoneOffset() * 60000;
-        const localTime = new Date(
-          now.getTime() + localOffset + timezoneOffset * 1000
-        );
+        const localTime = new Date(now.getTime() + localOffset + timezoneOffset * 1000);
         let hours = localTime.getHours();
         const minutes = localTime.getMinutes();
         const ampm = hours >= 12 ? "PM" : "AM";
         hours = hours % 12;
         hours = hours ? hours : 12;
-        const daysOfWeek = [
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ];
+        const daysOfWeek = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday",];
         const dayOfWeek = daysOfWeek[localTime.getDay()];
-        const formattedTime = `${hours}:${minutes
-          .toString()
-          .padStart(2, "0")} ${ampm}`;
+        const formattedTime = `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
         return { dayOfWeek, formattedTime };
       }
 
@@ -255,8 +256,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // Actualizar el mapa
       updateMap(data);
 
+      // Mostrar el contenido al encontrar una ciudad correcta
       document.querySelector(".weather").style.display = "block";
+      document.querySelector(".city-map").style.display = "block";
+      document.querySelector(".history-container").style.display = "block";
+      document.querySelector(".forecast").style.display = "block";
+      document.querySelector(".summary").style.display = "block";
       document.querySelector(".error").style.display = "none";
+      defaultMessage.style.display = "none";
 
       updateWeatherIcon(data);
 
@@ -269,14 +276,19 @@ document.addEventListener("DOMContentLoaded", function () {
     } catch (error) {
       console.error("Error fetching weather data:", error);
       document.querySelector(".weather").style.display = "none";
+      document.querySelector(".city-map").style.display = "none";
+      document.querySelector(".history-container").style.display = "none";
+      document.querySelector(".forecast").style.display = "none";
+      document.querySelector(".summary").style.display = "none";
       document.querySelector(".error").style.display = "block";
+      defaultMessage.style.display = "none";
       weatherIcon.src = "/assets/svg/default.svg";
     }
   }
 
   // Mapa
   // Inicializar el mapa de Leaflet
-  const map = L.map("map").setView([51.505, -0.09], 5); // Coordenadas iniciales y nivel de zoom
+  const map = L.map("map").setView([51.505, -0.09], 8); // Coordenadas iniciales y nivel de zoom
 
   // Añadir la capa base de OpenStreetMap
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -308,9 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const apiUrl = "https://api.openweathermap.org/data/2.5/forecast";
       const apiKey = "eb09705f59f13d948efa3f16fa466a92";
-      const forecastResponse = await fetch(
-        `${apiUrl}?units=metric&lat=${latitude}&lon=${longitude}&appid=${apiKey}`
-      ); // Realizar la solicitud para obtener la prevision del tiempo
+      const forecastResponse = await fetch(`${apiUrl}?units=metric&lat=${latitude}&lon=${longitude}&appid=${apiKey}`); // Realizar la solicitud para obtener la prevision del tiempo
       const forecastData = await forecastResponse.json();
 
       if (forecastResponse.status === 404) {
@@ -364,14 +374,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             // Actualizar las temperaturas máxima y mínima para el día
-            dailyForecasts[date].temp_max = Math.max(
-              dailyForecasts[date].temp_max,
-              item.main.temp_max
-            );
-            dailyForecasts[date].temp_min = Math.min(
-              dailyForecasts[date].temp_min,
-              item.main.temp_min
-            );
+            dailyForecasts[date].temp_max = Math.max(dailyForecasts[date].temp_max,item.main.temp_max);
+            dailyForecasts[date].temp_min = Math.min(dailyForecasts[date].temp_min,item.main.temp_min);
           }
         });
 
@@ -384,16 +388,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           // Crear elemento de pronóstico con clases de Tailwind
           const forecastItem = document.createElement("div");
-          forecastItem.classList.add(
-            "flex",
-            "items-center",
-            "justify-between",
-            "space-x-4",
-            "p-2",
-            "bg-white",
-            "bg-opacity-50",
-            "rounded-lg"
-          );
+          forecastItem.classList.add("flex","items-center","justify-between","space-x-4","p-2","bg-white","bg-opacity-50","rounded-lg");
 
           // Obtener la fecha y hora del texto
           const dateTimeString = forecast.dt_txt;
@@ -474,12 +469,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  document
-    .querySelector(".forecast-buttons button:nth-child(1)")
-    .addEventListener("click", () => updateForecast(3, weatherData));
-  document
-    .querySelector(".forecast-buttons button:nth-child(2)")
-    .addEventListener("click", () => updateForecast(5, weatherData));
+  document.querySelector(".forecast-buttons button:nth-child(1)").addEventListener("click", () => updateForecast(3, weatherData));
+  document.querySelector(".forecast-buttons button:nth-child(2)").addEventListener("click", () => updateForecast(5, weatherData));
 
   // Evento de búsqueda
   searchBtn.addEventListener("click", () => {
