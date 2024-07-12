@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function updateButtonsAndForecast(days, index) {
     setActiveButton(index);
-    // updateForecast(days, weatherData);
+    updateForecast(days, weatherData);
   }
 
   buttons.forEach((button, index) => {
@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-document.addEventListener("DOMContentLoaded", function () {
   // Main
   const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
   const apiKey = "eb09705f59f13d948efa3f16fa466a92";
@@ -170,6 +169,10 @@ document.addEventListener("DOMContentLoaded", function () {
       window.addEventListener("resize", () => {
         hourlyChart.resize();
       });
+      
+      // Redimensiona el mapa para que cargue entero
+      map.invalidateSize();
+
     } catch (error) {
       console.error("Error fetching hourly data:", error);
     }
@@ -273,6 +276,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Llamar a la función para actualizar el resumen
       updateSummary(city);
+      
+      // Para que muestre el mapa cargado correctamente
+      map.invalidateSize();
+
+      // Llamada a alertas meterologicas
+      showWeatherAlerts(data.name, data.sys.country);
+
     } catch (error) {
       console.error("Error fetching weather data:", error);
       document.querySelector(".weather").style.display = "none";
@@ -288,11 +298,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Mapa
   // Inicializar el mapa de Leaflet
-  const map = L.map("map").setView([51.505, -0.09], 8); // Coordenadas iniciales y nivel de zoom
+  const map = L.map("map").setView([0, 0], 8); // Coordenadas iniciales y nivel de zoom
 
   // Añadir la capa base de OpenStreetMap
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap contributors",
   }).addTo(map);
 
   // Capa de precipitaciones de OpenWeatherMap
@@ -316,7 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Funcion para obtener la prevision por coordenadas
-  async function getForecastByCoordinates(latitude, longitude) {
+  async function getForecast(latitude, longitude) {
     try {
       const apiUrl = "https://api.openweathermap.org/data/2.5/forecast";
       const apiKey = "eb09705f59f13d948efa3f16fa466a92";
@@ -329,7 +338,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Log para verificar los datos
-      console.log(forecastData);
+      // ? console.log(forecastData);
 
       return forecastData; // Devolver los datos de la prevision del tiempo
     } catch (error) {
@@ -339,30 +348,26 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Forecast ------
-  // Funcion para actualizar getForecastByCoordinates
+  // Funcion para actualizar getForecast
   async function updateForecast(numDays, weatherData) {
     try {
-      const forecastData = await getForecastByCoordinates(
+      const forecastData = await getForecast(
         weatherData.coord.lat,
         weatherData.coord.lon,
         numDays * 8
-      ); // Aproximadamente 8 registros por día (cada 3 horas)
+      );
 
       if (forecastData) {
-        // Limpiar el contenedor de pronóstico antes de actualizar
         const forecastContainer = document.querySelector(".forecast-container");
         forecastContainer.innerHTML = "";
 
-        // Filtrar y agrupar los datos por día
         const dailyForecasts = {};
         forecastData.list.forEach((item) => {
           const dateTime = new Date(item.dt_txt);
           const hour = dateTime.getUTCHours();
 
-          // Asegurarse de seleccionar los datos
           if (hour >= 10 && hour <= 13) {
-            // Ajustar según la ventana horaria deseada (10:00 - 13:00)
-            const date = item.dt_txt.split(" ")[0]; // Obtener solo la fecha (YYYY-MM-DD)
+            const date = item.dt_txt.split(" ")[0];
             if (!dailyForecasts[date]) {
               dailyForecasts[date] = {
                 temp_max: -Infinity,
@@ -373,57 +378,61 @@ document.addEventListener("DOMContentLoaded", function () {
               };
             }
 
-            // Actualizar las temperaturas máxima y mínima para el día
-            dailyForecasts[date].temp_max = Math.max(dailyForecasts[date].temp_max,item.main.temp_max);
-            dailyForecasts[date].temp_min = Math.min(dailyForecasts[date].temp_min,item.main.temp_min);
+            dailyForecasts[date].temp_max = Math.max(
+              dailyForecasts[date].temp_max,
+              item.main.temp_max
+            );
+            dailyForecasts[date].temp_min = Math.min(
+              dailyForecasts[date].temp_min,
+              item.main.temp_min
+            );
           }
         });
 
-        // Obtener las claves (fechas) y limitarlas a 'numDays'
         const dates = Object.keys(dailyForecasts).slice(0, numDays);
 
-        // Iterar sobre las fechas seleccionadas y mostrar la prevision
         dates.forEach((date) => {
           const forecast = dailyForecasts[date];
-
-          // Crear elemento de pronóstico con clases de Tailwind
           const forecastItem = document.createElement("div");
-          forecastItem.classList.add("flex","items-center","justify-between","space-x-4","p-2","bg-white","bg-opacity-50","rounded-lg");
+          forecastItem.classList.add(
+            "flex",
+            "items-center",
+            "justify-between",
+            "space-x-4",
+            "p-2",
+            "bg-white",
+            "bg-opacity-50",
+            "rounded-lg"
+          );
 
-          // Obtener la fecha y hora del texto
           const dateTimeString = forecast.dt_txt;
           const dateTime = new Date(dateTimeString);
-
-          // Obtener el nombre del día de la semana abreviado a 3 letras
           const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
           const dayOfWeek = daysOfWeek[dateTime.getDay()];
-
-          // Formatear la fecha como "Número del Día Mes, Día de la semana"
           const formattedDate = `${dateTime.getDate()} ${getMonthName(
             dateTime.getMonth()
           )}, ${dayOfWeek}`;
 
-          // Obtener temp_max y temp_min redondeados al siguiente entero
           const tempMax = Math.round(forecast.temp_max);
           const tempMin = Math.round(forecast.temp_min);
 
-          // Obtener el código del icono y crear la URL del icono
           const iconCode = forecast.weather.icon;
           const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
-          // Construir el contenido HTML para cada pronóstico
           forecastItem.innerHTML = `
-          <div class="flex items-center space-x-2">
-            <img src="${iconUrl}" alt="Weather icon" class="w-8 h-8">
-            <div class="text-lg font-semibold">${tempMax}º / ${tempMin}º</div>
-            <div class="text-sm text-center w-32">${forecast.description}</div>
-          </div>
-          <div class="text-right text-sm">${formattedDate}</div>
-        `;
+                    <div class="flex items-center space-x-2">
+                        <img src="${iconUrl}" alt="Weather icon" class="w-8 h-8">
+                        <div class="text-lg font-semibold">${tempMax}º / ${tempMin}º</div>
+                        <div class="text-sm text-center w-32">${forecast.description}</div>
+                    </div>
+                    <div class="text-right text-sm">${formattedDate}</div>
+                `;
 
-          // Añadir el elemento de pronóstico al contenedor
           forecastContainer.appendChild(forecastItem);
         });
+
+        // Ajuste para asegurar que el contenedor tenga al menos una altura mínima
+        forecastContainer.style.minHeight = `${forecastContainer.clientHeight}px`;
       }
     } catch (error) {
       console.error("Error updating forecast:", error);
@@ -448,6 +457,72 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
     return monthNames[monthIndex];
   }
+
+// Función para obtener alertas meteorológicas
+async function getWeatherAlerts(city, countryCode) {
+  try {
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const alertUrl = `https://history.openweathermap.org/data/2.5/history/city?q=${city},${countryCode}&type=hour&start=${currentTimestamp - 3600}&end=${currentTimestamp}&appid=${apiKey}`;
+
+    const response = await fetch(alertUrl);
+    const data = await response.json();
+
+    if (response.status !== 200) {
+      console.error("Error al obtener alertas meteorológicas:", data.message);
+      return null;
+    }
+
+    return data.alerts || []; // Devolver las alertas encontradas
+  } catch (error) {
+    console.error("Error fetching weather alerts:", error);
+    return null;
+  }
+}
+
+// Función para mostrar alertas meteorológicas
+async function showWeatherAlerts(city, countryCode) {
+  const alertContainer = document.querySelector(".history-container");
+  alertContainer.innerHTML = ""; // Limpiar contenido actual
+
+  const alerts = await getWeatherAlerts(city, countryCode);
+
+  if (alerts && alerts.length > 0) {
+    alerts.forEach((alert) => {
+      const alertItem = document.createElement("div");
+      alertItem.classList.add(
+        "flex",
+        "items-center",
+        "justify-between",
+        "space-x-4",
+        "p-2",
+        "bg-white",
+        "bg-opacity-50",
+        "rounded-lg"
+      );
+
+      const alertDate = new Date(alert.start * 1000);
+      const alertDateString = alertDate.toLocaleString();
+
+      alertItem.innerHTML = `
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-exclamation-triangle fa-lg text-yellow-500"></i>
+          <div class="text-lg font-semibold">${alert.event}</div>
+          <div class="text-sm text-center w-64">${alert.description}</div>
+        </div>
+        <div class="text-right text-sm">${alertDateString}</div>
+      `;
+
+      alertContainer.appendChild(alertItem);
+    });
+
+    // Mostrar el contenedor de alertas
+    alertContainer.style.display = "block";
+  } else {
+    // Mostrar mensaje de ninguna alerta encontrada
+    alertContainer.innerHTML = `<div class="text-xl font-bold">No hay alertas meteorológicas para esta ciudad.</div>`;
+    alertContainer.style.display = "block";
+  }
+}
 
   // Funcion para resetear los botones "3/5 days" a su estado inicial
   function resetButtons() {
@@ -478,12 +553,9 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSummary(searchBox.value);
   });
 
-  document
-    .querySelector(".search input")
-    .addEventListener("keydown", (event) => {
+  document.querySelector(".search input").addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         checkWeather(searchBox.value);
         updateSummary(searchBox.value);
       }
     });
-});
