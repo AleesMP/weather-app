@@ -41,11 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
   resetButtons();
   // updateForecast(3, weatherData);
 
-  // Función para resetear los botones "3/5 days" a su estado inicial
-  function resetButtons() {
-    buttons.forEach((btn) => btn.classList.remove("active"));
-    buttons[0].classList.add("active");
-  }
 });
 
   // Main
@@ -222,11 +217,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Obtener datos
       document.querySelector(".city").innerHTML = `${data.name}, ${data.sys.country}`;
-      document.querySelector(".description").innerHTML =data.weather[0].description;
       document.querySelector(".temp").innerHTML = Math.round(data.main.temp);
+      document.querySelector(".description").innerHTML =data.weather[0].description;
+
+      document.querySelector(".sunrise").innerHTML = convertUnixTimestamp(data.sys.sunrise);
+      document.querySelector(".sunset").innerHTML = convertUnixTimestamp(data.sys.sunset);
+
       document.querySelector(".humidity").innerHTML = `${data.main.humidity}%`;
-      document.querySelector(".wind").innerHTML = `${data.wind.speed} km/h`;
       document.querySelector(".pressure").innerHTML = `${data.main.pressure} hPa`;
+      document.querySelector(".wind-speed").innerHTML = `${data.wind.speed} km/h`;
+      document.querySelector(".wind-direction").innerHTML = `${data.wind.deg}`;
+      document.querySelector(".visibility").innerHTML = `${data.visibility} km`;
+      
+      document.querySelector(".pressure").innerHTML = `${data.main.pressure} hPa`;
+      document.querySelector(".pressure").innerHTML = `${data.main.pressure} hPa`;
+      
 
       // Funcion para obtener hora y dia
       function getCurrentTimeAndDay(timezoneOffset) {
@@ -249,9 +254,17 @@ document.addEventListener("DOMContentLoaded", function () {
       h2Hour.textContent = `${dayOfWeek}, ${formattedTime}`;
 
       // Añade datos de lluvia si llueve
-      const rainContainer = document.querySelector(".rain-container");
+      const rainContainer = document.querySelector(".precipitation");
       if (data.rain && data.rain["1h"]) {
-        rainContainer.innerHTML = `<i class="fa-solid fa-droplet fa-lg"></i><p class="ml-1">${data.rain["1h"]}mm/h</p>`;
+        rainContainer.innerHTML = `
+        <div class="flex justify-between items-center mt-2">
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-cloud-rain"></i>
+            <p>Intensity</p>
+          </div>
+          <p>${data.rain["1h"]} mm/h</p>
+        </div>
+        `;
       } else {
         rainContainer.innerHTML = "";
       }
@@ -268,6 +281,14 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelector(".error").style.display = "none";
       defaultMessage.style.display = "none";
 
+      //  Tranforma y da formato a la hora de amanecer y atardecer
+      function convertUnixTimestamp(timestamp) {
+        const date = new Date(timestamp * 1000);
+        const hours = date.getHours().toString().padStart(2, "0");
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+        return `${hours}:${minutes}`;
+      }
+
       updateWeatherIcon(data);
 
       // Resetear los botones y actualizar la prevision inicial para 3 dias por defecto
@@ -280,8 +301,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // Para que muestre el mapa cargado correctamente
       map.invalidateSize();
 
-      // Llamada a alertas meterologicas
-      showWeatherAlerts(data.name, data.sys.country);
+
+      console.log(weatherData);
+
 
     } catch (error) {
       console.error("Error fetching weather data:", error);
@@ -347,7 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Forecast ------
+  // Forecast
   // Funcion para actualizar getForecast
   async function updateForecast(numDays, weatherData) {
     try {
@@ -457,72 +479,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
     return monthNames[monthIndex];
   }
-
-// Función para obtener alertas meteorológicas
-async function getWeatherAlerts(city, countryCode) {
-  try {
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    const alertUrl = `https://history.openweathermap.org/data/2.5/history/city?q=${city},${countryCode}&type=hour&start=${currentTimestamp - 3600}&end=${currentTimestamp}&appid=${apiKey}`;
-
-    const response = await fetch(alertUrl);
-    const data = await response.json();
-
-    if (response.status !== 200) {
-      console.error("Error al obtener alertas meteorológicas:", data.message);
-      return null;
-    }
-
-    return data.alerts || []; // Devolver las alertas encontradas
-  } catch (error) {
-    console.error("Error fetching weather alerts:", error);
-    return null;
-  }
-}
-
-// Función para mostrar alertas meteorológicas
-async function showWeatherAlerts(city, countryCode) {
-  const alertContainer = document.querySelector(".history-container");
-  alertContainer.innerHTML = ""; // Limpiar contenido actual
-
-  const alerts = await getWeatherAlerts(city, countryCode);
-
-  if (alerts && alerts.length > 0) {
-    alerts.forEach((alert) => {
-      const alertItem = document.createElement("div");
-      alertItem.classList.add(
-        "flex",
-        "items-center",
-        "justify-between",
-        "space-x-4",
-        "p-2",
-        "bg-white",
-        "bg-opacity-50",
-        "rounded-lg"
-      );
-
-      const alertDate = new Date(alert.start * 1000);
-      const alertDateString = alertDate.toLocaleString();
-
-      alertItem.innerHTML = `
-        <div class="flex items-center space-x-2">
-          <i class="fa-solid fa-exclamation-triangle fa-lg text-yellow-500"></i>
-          <div class="text-lg font-semibold">${alert.event}</div>
-          <div class="text-sm text-center w-64">${alert.description}</div>
-        </div>
-        <div class="text-right text-sm">${alertDateString}</div>
-      `;
-
-      alertContainer.appendChild(alertItem);
-    });
-
-    // Mostrar el contenedor de alertas
-    alertContainer.style.display = "block";
-  } else {
-    // Mostrar mensaje de ninguna alerta encontrada
-    alertContainer.innerHTML = `<div class="text-xl font-bold">No hay alertas meteorológicas para esta ciudad.</div>`;
-    alertContainer.style.display = "block";
-  }
-}
 
   // Funcion para resetear los botones "3/5 days" a su estado inicial
   function resetButtons() {

@@ -51,44 +51,85 @@
           <span class="country"></span>
           <div id="time"></div>
         </div>
-        <!-- TODO: reestructurar como se muestra icono, temp, etc. -->
         <div class="flex flex-col items-center mt-4">
           <div class="flex items-center">
             <img id="weather-icon" class="w-32 h-32" src="assets/images/default.svg" alt="weather-icon">
             <div class="ml-4">
               <div class="font-bold text-5xl leading-none mb-1">
-                <span class="temp">?</span>
+                <span class="temp"></span>
                 <span class="text-base align-top">ºC</span>
               </div>
-              <div class="description text-sm">Descripción</div>
+              <div class="description text-sm"></div>
             </div>
           </div>
         </div>
-        <!-- TODO: añadirle iconos a la info -->
-        <div class="details text-sm mt-4 flex flex-wrap justify-center space-x-4">
-          <div class="flex items-center">
-            <i class="fa-solid fa-water fa-lg"></i>
-            <p class="humidity ml-1">Humedad</p>
-          </div>
-          <div class="flex items-center">
-            <i class="fa-solid fa-wind fa-lg"></i>
-            <p class="wind ml-1">Viento</p>
-          </div>
-          <div class="flex items-center">
-            <i class="fa-solid fa-gauge-high fa-lg"></i></i>
-            <p class="pressure ml-1">Presión</p>
-          </div>
-          <div class="flex items-center rain-container"></div>
-        </div>
+        
       </div>
       <!-- City map -->
       <div class="city-map col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center hidden">
         <div id="map" class="w-full h-full rounded-lg"></div>
     </div>
-    <!-- TODO: ver que informaion se añade aqui -->
-      <!-- History container -->
-      <div class="history-container col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center hidden">
-        <div class="text-xl font-bold">Otras ciudades</div>
+      <!-- More info container -->
+      <div class="history-container col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left hidden">
+        <div class="flex items-center justify-between p-2">
+          <div class="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sunrise" viewBox="0 0 16 16">
+              <path d="M7.646 1.146a.5.5 0 0 1 .708 0l1.5 1.5a.5.5 0 0 1-.708.708L8.5 2.707V4.5a.5.5 0 0 1-1 0V2.707l-.646.647a.5.5 0 1 1-.708-.708zM2.343 4.343a.5.5 0 0 1 .707 0l1.414 1.414a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707m11.314 0a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0M8 7a3 3 0 0 1 2.599 4.5H5.4A3 3 0 0 1 8 7m3.71 4.5a4 4 0 1 0-7.418 0H.499a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10m13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
+            </svg>
+            <p>Sunrise:</p>
+            <p class="sunrise"></p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sunset" viewBox="0 0 16 16">
+              <path d="M7.646 4.854a.5.5 0 0 0 .708 0l1.5-1.5a.5.5 0 0 0-.708-.708l-.646.647V1.5a.5.5 0 0 0-1 0v1.793l-.646-.647a.5.5 0 1 0-.708.708zm-5.303-.51a.5.5 0 0 1 .707 0l1.414 1.413a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707zm11.314 0a.5.5 0 0 1 0 .706l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM8 7a3 3 0 0 1 2.599 4.5H5.4A3 3 0 0 1 8 7m3.71 4.5a4 4 0 1 0-7.418 0H.499a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10m13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
+            </svg>
+            <p>Sunset:</p>
+            <p class="sunset"></p>
+          </div>
+        </div>
+        <hr class="border-gray-300">
+        <div class="details text-sm grid gap-y-2">
+          <div class="precipitation">
+            <!-- Rain data if rainning -->
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+              <i class="fa-solid fa-water"></i>
+              <p>Humidity</p>
+            </div>
+            <p class="humidity">71%</p>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+              <i class="fa-solid fa-gauge-high"></i>
+              <p>Pressure</p>
+            </div>
+            <p class="pressure">1001.0 mb</p>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+              <i class="fa-solid fa-wind"></i>
+              <p>Wind Speed</p>
+            </div>
+            <p class="wind-speed"></p>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+              <i class="fa-solid fa-location-arrow"></i>
+              <p>Wind Direction</p>
+            </div>
+            <p class="wind-direction">W</p>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+              <i class="fa-solid fa-eye"></i>
+              <p>Visibility</p>
+            </div>
+            <p class="visibility"></p>
+          </div>
+          
+        </div>
       </div>
 
       <!-- Segunda fila -->
