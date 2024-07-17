@@ -1,21 +1,22 @@
 // Navbar
 // Light/Dark switch
+document.addEventListener("DOMContentLoaded", function () {
 const themeToggleButton = document.getElementById("theme-toggle");
 const themeIcon = document.getElementById("theme-icon");
 
-themeToggleButton.addEventListener("click", () => {
-  const htmlClasses = document.documentElement.classList;
-  if (htmlClasses.contains("dark")) {
-    htmlClasses.remove("dark");
-    themeIcon.classList.remove("fa-sun");
-    themeIcon.classList.add("fa-moon");
-  } else {
-    htmlClasses.add("dark");
-    themeIcon.classList.remove("fa-moon");
-    themeIcon.classList.add("fa-sun");
-  }
+  themeToggleButton.addEventListener("click", () => {
+    const htmlClasses = document.documentElement.classList;
+    if (htmlClasses.contains("dark")) {
+      htmlClasses.remove("dark");
+      themeIcon.classList.remove("fa-sun");
+      themeIcon.classList.add("fa-moon");
+    } else {
+      htmlClasses.add("dark");
+      themeIcon.classList.remove("fa-moon");
+      themeIcon.classList.add("fa-sun");
+    }
+  });
 });
-
 document.addEventListener("DOMContentLoaded", function () {
   // Configuración inicial de botones y forecast
   const buttons = document.querySelectorAll(".forecast-buttons button");
@@ -126,10 +127,8 @@ document.addEventListener("DOMContentLoaded", function () {
                   return tooltipItems[0].label;
                 },
                 label: function (tooltipItem) {
-                  const temperature = `Temperatura: ${tooltipItem.raw}°C`;
-                  const description = `Descripción: ${
-                    weatherDescriptions[tooltipItem.dataIndex]
-                  }`;
+                  const temperature = `Temperature: ${tooltipItem.raw}°C`;
+                  const description = `Description: ${weatherDescriptions[tooltipItem.dataIndex]}`;
                   return [temperature, description].filter(Boolean);
                 },
               },
@@ -139,20 +138,20 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             title: {
               display: true,
-              text: "Clima por Horas",
+              text: "Hourly weather",
             },
           },
           scales: {
             x: {
               title: {
                 display: true,
-                text: "Hora",
+                text: "Hour",
               },
             },
             y: {
               title: {
                 display: true,
-                text: "Temperatura (°C)",
+                text: "Temperature (°C)",
               },
               position: "left",
             },
@@ -219,19 +218,34 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelector(".city").innerHTML = `${data.name}, ${data.sys.country}`;
       document.querySelector(".temp").innerHTML = Math.round(data.main.temp);
       document.querySelector(".description").innerHTML =data.weather[0].description;
-
       document.querySelector(".sunrise").innerHTML = convertUnixTimestamp(data.sys.sunrise);
       document.querySelector(".sunset").innerHTML = convertUnixTimestamp(data.sys.sunset);
-
       document.querySelector(".humidity").innerHTML = `${data.main.humidity}%`;
       document.querySelector(".pressure").innerHTML = `${data.main.pressure} hPa`;
       document.querySelector(".wind-speed").innerHTML = `${data.wind.speed} km/h`;
-      document.querySelector(".wind-direction").innerHTML = `${data.wind.deg}`;
-      document.querySelector(".visibility").innerHTML = `${data.visibility} km`;
+
+      // Funcion para obtener la dirección del viento basada en el angulo
+      function getWindDirection(angle) {
+        const direction = [
+            "N", "NNE", "NE", "ENE",
+            "E", "ESE", "SE", "SSE",
+            "S", "SSW", "SW", "WSW",
+            "W", "WNW", "NW", "NNW"
+        ];
+
+        // Redondeamos el angulo al mas cercano de los 16 puntos cardinales
+        const index = Math.round(angle / 22.5) % 16;
+
+        return direction[index];
+      }
+      const windDirection = getWindDirection(data.wind.deg);
+      document.querySelector(".wind-direction").textContent = windDirection;
       
-      document.querySelector(".pressure").innerHTML = `${data.main.pressure} hPa`;
-      document.querySelector(".pressure").innerHTML = `${data.main.pressure} hPa`;
+      // Redondeo de datos de visibilidad (max. 10km)
+      const visibilityInKm = Math.min(Math.round(data.visibility / 1000), 10);
+      document.querySelector(".visibility").textContent = `${visibilityInKm} km`;
       
+
 
       // Funcion para obtener hora y dia
       function getCurrentTimeAndDay(timezoneOffset) {
@@ -416,16 +430,7 @@ document.addEventListener("DOMContentLoaded", function () {
         dates.forEach((date) => {
           const forecast = dailyForecasts[date];
           const forecastItem = document.createElement("div");
-          forecastItem.classList.add(
-            "flex",
-            "items-center",
-            "justify-between",
-            "space-x-4",
-            "p-2",
-            "bg-white",
-            "bg-opacity-50",
-            "rounded-lg"
-          );
+          forecastItem.classList.add("flex", "items-center", "justify-between", "space-x-4", "p-2", "bg-white", "bg-opacity-50", "rounded-lg", "dark:bg-gray-700", "dark:text-white");
 
           const dateTimeString = forecast.dt_txt;
           const dateTime = new Date(dateTimeString);
