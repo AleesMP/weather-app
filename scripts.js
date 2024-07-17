@@ -1,22 +1,21 @@
-// Navbar
-// Light/Dark switch
-document.addEventListener("DOMContentLoaded", function () {
-const themeToggleButton = document.getElementById("theme-toggle");
-const themeIcon = document.getElementById("theme-icon");
+// // Navbar
+// // Light/Dark switch
+// const themeToggleButton = document.getElementById("theme-toggle");
+// const themeIcon = document.getElementById("theme-icon");
 
-  themeToggleButton.addEventListener("click", () => {
-    const htmlClasses = document.documentElement.classList;
-    if (htmlClasses.contains("dark")) {
-      htmlClasses.remove("dark");
-      themeIcon.classList.remove("fa-sun");
-      themeIcon.classList.add("fa-moon");
-    } else {
-      htmlClasses.add("dark");
-      themeIcon.classList.remove("fa-moon");
-      themeIcon.classList.add("fa-sun");
-    }
-  });
-});
+// themeToggleButton.addEventListener("click", () => {
+//   const htmlClasses = document.documentElement.classList;
+//   if (htmlClasses.contains("dark")) {
+//     htmlClasses.remove("dark");
+//     themeIcon.classList.remove("fa-sun");
+//     themeIcon.classList.add("fa-moon");
+//   } else {
+//     htmlClasses.add("dark");
+//     themeIcon.classList.remove("fa-moon");
+//     themeIcon.classList.add("fa-sun");
+//   }
+// });
+
 document.addEventListener("DOMContentLoaded", function () {
   // Configuración inicial de botones y forecast
   const buttons = document.querySelectorAll(".forecast-buttons button");
@@ -288,7 +287,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Mostrar el contenido al encontrar una ciudad correcta
       document.querySelector(".weather").style.display = "block";
-      document.querySelector(".city-map").style.display = "block";
+      if (window.innerWidth < 768) { // Oculta city-map en dispositivos menores a 768px (sm)
+        document.querySelector(".city-map").style.display = "none";
+      }
+      document.querySelector(".city-map").classList.remove("hidden");
       document.querySelector(".history-container").style.display = "block";
       document.querySelector(".forecast").style.display = "block";
       document.querySelector(".summary").style.display = "block";
@@ -508,15 +510,24 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelector(".forecast-buttons button:nth-child(1)").addEventListener("click", () => updateForecast(3, weatherData));
   document.querySelector(".forecast-buttons button:nth-child(2)").addEventListener("click", () => updateForecast(5, weatherData));
 
+
+  function displayCityMap() {
+    if (window.innerWidth >= 768) {
+      document.querySelector(".city-map").classList.remove("hidden");
+    }
+  }
+
   // Evento de búsqueda
-  searchBtn.addEventListener("click", () => {
-    checkWeather(searchBox.value);
-    updateSummary(searchBox.value);
+  searchBtn.addEventListener("click", async () => {
+    await checkWeather(searchBox.value);
+    await updateSummary(searchBox.value);
+    displayCityMap();
   });
 
-  document.querySelector(".search input").addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        checkWeather(searchBox.value);
-        updateSummary(searchBox.value);
-      }
-    });
+  searchBox.addEventListener("keydown", async (event) => {
+    if (event.key === "Enter") {
+      await checkWeather(searchBox.value);
+      await updateSummary(searchBox.value);
+      displayCityMap();
+    }
+  });

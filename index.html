@@ -25,11 +25,12 @@
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
     </div>
-    <div class="theme-toggle">
+    <!-- Commented because GitHub Pages does not recognise it -->
+    <!-- <div class="theme-toggle">
       <button id="theme-toggle" class="p-4 bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg cursor-pointer transition duration-300 ease-in-out">
         <i id="theme-icon" class="fa-solid fa-moon"></i>
       </button>
-    </div>
+    </div> -->
   </div>
 
   <main class="flex-1 p-8 overflow-y-auto">
@@ -38,13 +39,10 @@
       <i class="fa-solid fa-magnifying-glass-location fa-3x"></i>
       <p class="text-black">Introduce una ciudad para mostrar su información meteorológica</p>
     </div>
-
-    <!-- TODO: añadir "dark:(con respectivo estilo)" para el switch light/dark -->
-
     <div class="grid grid-cols-12 gap-6">
 
       <!-- City info -->
-      <div class="weather col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left dark:bg-gray-800 dark:text-white hidden">
+      <div class="weather col-span-12 md:col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left dark:bg-gray-800 dark:text-white hidden">
         <div class="mt-2 ml-2">
           <div class="city text-xl font-bold ">Ciudad</div>
           <span class="country"></span>
@@ -65,11 +63,11 @@
         
       </div>
       <!-- City map -->
-      <div class="city-map col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center dark:bg-gray-800 dark:text-white hidden">
+      <div class="city-map col-span-12 md:col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center dark:bg-gray-800 dark:text-white hidden">
         <div id="map" class="w-full h-full rounded-lg"></div>
-    </div>
+      </div>
       <!-- More info container -->
-      <div class="history-container col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left dark:bg-gray-800 dark:text-white hidden">
+      <div class="history-container col-span-12 md:col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left dark:bg-gray-800 dark:text-white hidden">
         <div class="flex items-center justify-between p-2">
           <div class="flex items-center space-x-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sunrise" viewBox="0 0 16 16">
@@ -132,7 +130,7 @@
       </div>
 
       <!-- Forecast -->
-      <div class="forecast col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left dark:bg-gray-800 dark:text-white hidden">
+      <div class="forecast col-span-12 md:col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left dark:bg-gray-800 dark:text-white hidden">
         <div class="flex justify-between mb-4">
             <div class="text-xl font-bold mt-2 ml-2">Forecast</div>
             <div class="forecast-buttons flex space-x-0 bg-white bg-opacity-50 rounded-lg dark:bg-gray-700 dark:text-white">
@@ -147,7 +145,7 @@
 
 
       <!-- Summary -->
-      <div class="summary col-span-9 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center dark:bg-gray-800 dark:text-white hidden">
+      <div class="summary col-span-12 md:col-span-9 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center dark:bg-gray-800 dark:text-white hidden">
         <!-- Resumen -->
         <div class="summary-container grid grid-cols-2 gap-4"></div>
         <div class="chart-container mt-4 w-full">
