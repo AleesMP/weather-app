@@ -287,13 +287,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Mostrar el contenido al encontrar una ciudad correcta
       document.querySelector(".weather").style.display = "block";
-      if (window.innerWidth < 768) { // Oculta city-map en dispositivos menores a 768px (sm)
+      if (window.innerWidth < 768) { // Oculta en dispositivos menores a 768px (sm)
         document.querySelector(".city-map").style.display = "none";
+        document.querySelector(".summary").style.display = "none";
       }
       document.querySelector(".city-map").classList.remove("hidden");
       document.querySelector(".history-container").style.display = "block";
       document.querySelector(".forecast").style.display = "block";
-      document.querySelector(".summary").style.display = "block";
+      document.querySelector(".summary").style.display = "hidden";
       document.querySelector(".error").style.display = "none";
       defaultMessage.style.display = "none";
 
@@ -514,6 +515,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function displayCityMap() {
     if (window.innerWidth >= 768) {
       document.querySelector(".city-map").classList.remove("hidden");
+      document.querySelector(".summary").classList.remove("hidden");
     }
   }
 

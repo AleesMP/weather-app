@@ -14,37 +14,43 @@
 <body class="flex flex-col h-screen">
   <!-- Navbar -->
   <div class="fixed flex px-6 py-4 justify-between items-center top-0 left-0 w-full custom-bg-opacity shadow-2xl z-50">
-    <div class="text-white text-2xl font-bold">
+    <!-- Nombre y icono del clima, oculto en dispositivos móviles -->
+    <div class="text-white text-2xl font-bold hidden md:flex items-center">
       <i class="fa-solid fa-cloud-sun-rain"></i><span class="ml-2">Weather</span>
     </div>
+    
     <div class="search flex justify-center flex-grow mx-4">
-      <input class="p-4 w-96 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-400 placeholder:text-gray-400"
-        type="text" placeholder="Buscar por ciudad" spellcheck="false">
+      <input class="p-4 w-auto md:w-96 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-400 placeholder:text-gray-400"
+        type="text" placeholder="Search by city" spellcheck="false">
       <button
         class="p-4 ml-2 bg-blue-400 text-white border-none rounded-lg text-base cursor-pointer transition duration-200 ease-in-out hover:bg-blue-500 shadow-lg">
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
     </div>
-    <!-- Commented because GitHub Pages does not recognise it -->
-    <!-- <div class="theme-toggle">
+    
+    <!-- Botón de cambio de tema (tema oscuro/claro) -->
+    <!-- Este bloque se muestra solo en pantallas más grandes -->
+    <!-- <div class="theme-toggle hidden md:block">
       <button id="theme-toggle" class="p-4 bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg cursor-pointer transition duration-300 ease-in-out">
         <i id="theme-icon" class="fa-solid fa-moon"></i>
       </button>
     </div> -->
   </div>
+  
+  
 
   <main class="flex-1 p-8 overflow-y-auto">
 
     <div class="default-message text-center items-center justify-center">
       <i class="fa-solid fa-magnifying-glass-location fa-3x"></i>
-      <p class="text-black">Introduce una ciudad para mostrar su información meteorológica</p>
+      <p class="text-black">Enter a city to display its meteorological information</p>
     </div>
     <div class="grid grid-cols-12 gap-6">
 
       <!-- City info -->
       <div class="weather col-span-12 md:col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left dark:bg-gray-800 dark:text-white hidden">
         <div class="mt-2 ml-2">
-          <div class="city text-xl font-bold ">Ciudad</div>
+          <div class="city text-xl font-bold "></div>
           <span class="country"></span>
           <div id="time"></div>
         </div>
@@ -146,7 +152,6 @@
 
       <!-- Summary -->
       <div class="summary col-span-12 md:col-span-9 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center dark:bg-gray-800 dark:text-white hidden">
-        <!-- Resumen -->
         <div class="summary-container grid grid-cols-2 gap-4"></div>
         <div class="chart-container mt-4 w-full">
           <canvas id="hourlyChart" class="w-full max-w-full h-auto md:max-h-80"></canvas>
