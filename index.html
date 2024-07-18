@@ -37,16 +37,21 @@
     </div> -->
   </div>
   
-  
-
+   <!-- ! --><!-- FIXME: Si buscas algo erroneo y luego bien no aparece city-map ni summary -->
+   <!-- ! --><!-- FIXME: Alto de Summary en PROD -->
   <main class="flex-1 p-8 overflow-y-auto">
 
     <div class="default-message text-center items-center justify-center">
       <i class="fa-solid fa-magnifying-glass-location fa-3x"></i>
       <p class="text-black">Enter a city to display its meteorological information</p>
     </div>
-    <div class="grid grid-cols-12 gap-6">
+    
+    <div class="error text-center text-slate-500 items-center justify-center z-50 hidden">
+      <img src="assets/images/default.svg" alt="default image" class="w-10 h-10 mx-auto mb-2">
+      <p class="text-black">City not found</p>
+    </div>
 
+    <div class="grid grid-cols-12 gap-6">
       <!-- City info -->
       <div class="weather col-span-12 md:col-span-3 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-left dark:bg-gray-800 dark:text-white hidden">
         <div class="mt-2 ml-2">
@@ -66,7 +71,6 @@
             </div>
           </div>
         </div>
-        
       </div>
       <!-- City map -->
       <div class="city-map col-span-12 md:col-span-6 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center dark:bg-gray-800 dark:text-white hidden">
@@ -123,7 +127,6 @@
             </div>
             <p class="wind-direction"></p>
           </div>
-          
           <div class="flex justify-between items-center">
             <div class="flex items-center space-x-2">
               <i class="fa-solid fa-eye"></i>
@@ -131,7 +134,6 @@
             </div>
             <p class="visibility"></p>
           </div>
-          
         </div>
       </div>
 
@@ -145,10 +147,8 @@
             </div>
         </div>
         <div class="forecast-container space-y-2">
-            <!-- Aquí se añadirán dinámicamente los datos de la previsión -->
         </div>
       </div>
-
 
       <!-- Summary -->
       <div class="summary col-span-12 md:col-span-9 custom-bg-opacity backdrop-blur-md rounded-2xl shadow-2xl p-4 text-center dark:bg-gray-800 dark:text-white hidden">
@@ -159,16 +159,8 @@
       </div>
     </div>
 
-
-    <!-- Error: city not found -->
-    <div class="error text-center text-slate-500 items-center justify-center z-50 hidden">
-      <img src="assets/images/default.svg" alt="default image" class="w-10 h-10 mx-auto mb-2">
-      <p class="text-black">City not found</p>
-    </div>
-
   </main>
-
-
+  
   <script type="module" src="./scripts.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
