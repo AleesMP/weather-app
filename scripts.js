@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
         hourlyChart.destroy();
       }
 
-      const ctx = document.getElementById("hourlyChart").getContext("2d");
+      const ctx = document.getElementById("hourly-chart").getContext("2d");
       hourlyChart = new Chart(ctx, {
         type: "line",
         data: {
@@ -170,12 +170,6 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Error fetching hourly data:", error);
     }
   }
-
-  window.addEventListener("resize", () => {
-    if (hourlyChart) {
-      hourlyChart.resize();
-    }
-  });
 
   // Función para obtener datos del clima por ciudad
   async function checkWeather(city) {
