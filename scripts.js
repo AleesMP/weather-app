@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
         hourlyChart.destroy();
       }
 
-      const ctx = document.getElementById("hourly-chart").getContext("2d");
+      const ctx = document.getElementById("hourlyChart").getContext("2d");
       hourlyChart = new Chart(ctx, {
         type: "line",
         data: {
