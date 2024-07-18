@@ -48,17 +48,3 @@ main {
 .forecast {
   transition: height 0.3s ease; /* Ejemplo de transición suave en altura */
 }
-
-.summary {
-  height: 100%; /* Para que el contenedor ocupe todo el alto disponible */
-}
-.chart-container {
-  height: 100%; /* Ocupa todo el espacio disponible del contenedor */
-  display: flex; /* Flexbox para centrar el contenido */
-  justify-content: center; /* Centrar horizontalmente */
-  align-items: center; /* Centrar verticalmente */
-}
-#hourlyChart {
-  height: 100%; /* El canvas ocupa todo el espacio del contenedor */
-  width: 100%; /* El canvas ocupa todo el espacio del contenedor */
-}
